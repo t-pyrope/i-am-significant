@@ -111,7 +111,7 @@ export default function Home() {
         >
           <Box sx={{ textAlign: "center", mb: 1 }}>
             <Typography
-              component="h1"
+              component="h6"
               sx={{
                 color: "text.primary",
                 fontFamily: "Georgia, 'Times New Roman', serif",
@@ -123,6 +123,7 @@ export default function Home() {
               i am significant
             </Typography>
             <Typography
+              component="h1"
               color="text.secondary"
               sx={{
                 mt: 1.5,
@@ -130,7 +131,8 @@ export default function Home() {
                 lineHeight: 1.6,
               }}
             >
-              Введите дату рождения и город рождения на английском
+              Рассчитайте натальную карту по дате, точному времени и месту
+              рождения
             </Typography>
           </Box>
 
