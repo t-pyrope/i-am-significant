@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import {
+  AppBar,
   Box,
   Button,
   Stack,
@@ -13,6 +14,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import {
@@ -25,7 +27,8 @@ import {
   type NatalChart,
   type NatalHouse,
 } from "./types";
-import {getAspectedPlanetName} from "@/app/natal/utils";
+import { getAspectedPlanetName } from "@/app/natal/utils";
+import { useRouter } from "next/navigation";
 
 const natalStorageKey = "natalChart";
 
@@ -60,25 +63,21 @@ export default function NatalPage() {
 
   return (
     <Box sx={{ minHeight: "100svh", bgcolor: "var(--background)" }}>
-      <Box
-        component="header"
-        sx={{
-          borderBottom: "1px solid rgba(31, 26, 23, 0.14)",
-          px: { xs: 3, sm: 4 },
-          py: 2,
-        }}
-      >
-        <Typography
-          component="p"
-          sx={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontSize: "1.2rem",
-            color: "text.primary",
-          }}
-        >
-          i am significant
-        </Typography>
-      </Box>
+      <AppBar color="inherit" elevation={0}>
+        <Toolbar>
+          <Typography
+            component="h6"
+            sx={{
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              fontSize: "1.2rem",
+              color: "text.primary",
+            }}
+          >
+            i am significant
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Toolbar />
 
       <Box
         component="main"
@@ -92,7 +91,9 @@ export default function NatalPage() {
       >
         {!hasCheckedStorage ? <LoadingState /> : null}
         {hasCheckedStorage && !chart ? <UnavailableState /> : null}
-        {hasCheckedStorage && chart ? <NatalChartContent chart={chart} /> : null}
+        {hasCheckedStorage && chart ? (
+          <NatalChartContent chart={chart} />
+        ) : null}
       </Box>
     </Box>
   );
@@ -134,9 +135,22 @@ function UnavailableState() {
 }
 
 function NatalChartContent({ chart }: { chart: NatalChart }) {
+  const router = useRouter();
+
+  const startAgain = () => {
+    localStorage.clear();
+    router.replace("/");
+  };
+
   return (
     <Stack spacing={{ xs: 5, sm: 6 }}>
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Typography
           component="h1"
           sx={{
@@ -148,6 +162,9 @@ function NatalChartContent({ chart }: { chart: NatalChart }) {
         >
           Натальная карта
         </Typography>
+        <Button onClick={startAgain} variant="contained" color="error">
+          Начать сначала
+        </Button>
       </Box>
 
       <Section title="Обзор карты">
@@ -183,13 +200,7 @@ function NatalChartContent({ chart }: { chart: NatalChart }) {
   );
 }
 
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <Box component="section">
       <Typography
@@ -304,7 +315,9 @@ function AspectsTable({ aspects }: { aspects: NatalAspect[] }) {
               {/*<TableCell>{aspect.aspecting_planet_id}</TableCell>*/}
               <TableCell>{aspect.type}</TableCell>
               {/*<TableCell>{aspect.aspect_type}</TableCell>*/}
-              <TableCell>{getAspectedPlanetName(aspect.aspected_planet)}</TableCell>
+              <TableCell>
+                {getAspectedPlanetName(aspect.aspected_planet)}
+              </TableCell>
               {/*<TableCell>{aspect.aspected_planet_id}</TableCell>*/}
               <TableCell>{formatDegree(aspect.orb)}</TableCell>
               <TableCell>{formatDegree(aspect.diff)}</TableCell>
