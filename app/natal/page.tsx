@@ -25,6 +25,7 @@ import {
   type NatalChart,
   type NatalHouse,
 } from "./types";
+import {getAspectedPlanetName} from "@/app/natal/utils";
 
 const natalStorageKey = "natalChart";
 
@@ -153,9 +154,9 @@ function NatalChartContent({ chart }: { chart: NatalChart }) {
         <TableContainer sx={tableContainerSx}>
           <Table>
             <TableBody>
-              <OverviewRow label="Ascendant" value={chart.ascendant} />
-              <OverviewRow label="Midheaven / MC" value={chart.midheaven} />
-              <OverviewRow label="Vertex" value={chart.vertex} />
+              <OverviewRow label="Асцендент (ASC)" value={chart.ascendant} />
+              <OverviewRow label="Середина неба (MC)" value={chart.midheaven} />
+              <OverviewRow label="Вертекс (Vertex)" value={chart.vertex} />
             </TableBody>
           </Table>
         </TableContainer>
@@ -225,7 +226,7 @@ function BodiesTable({ bodies }: { bodies: NatalBody[] }) {
             <HeadCell>Название</HeadCell>
             <HeadCell>Полный градус</HeadCell>
             <HeadCell>Градус в знаке</HeadCell>
-            <HeadCell>ID знака</HeadCell>
+            {/*<HeadCell>ID знака</HeadCell>*/}
             <HeadCell>Знак</HeadCell>
             <HeadCell>Дом</HeadCell>
             <HeadCell>Скорость</HeadCell>
@@ -238,7 +239,7 @@ function BodiesTable({ bodies }: { bodies: NatalBody[] }) {
               <TableCell>{body.name}</TableCell>
               <TableCell>{formatDegree(body.full_degree)}</TableCell>
               <TableCell>{formatDegree(body.norm_degree)}</TableCell>
-              <TableCell>{body.sign_id}</TableCell>
+              {/*<TableCell>{body.sign_id}</TableCell>*/}
               <TableCell>{body.sign}</TableCell>
               <TableCell>{body.house}</TableCell>
               <TableCell>{formatNumber(body.speed)}</TableCell>
@@ -259,7 +260,7 @@ function HousesTable({ houses }: { houses: NatalHouse[] }) {
           <TableRow>
             <HeadCell>Дом</HeadCell>
             <HeadCell>Знак</HeadCell>
-            <HeadCell>ID знака</HeadCell>
+            {/*<HeadCell>ID знака</HeadCell>*/}
             <HeadCell>Градус</HeadCell>
           </TableRow>
         </TableHead>
@@ -268,7 +269,7 @@ function HousesTable({ houses }: { houses: NatalHouse[] }) {
             <TableRow key={house.house}>
               <TableCell>{house.house}</TableCell>
               <TableCell>{house.sign}</TableCell>
-              <TableCell>{house.sign_id}</TableCell>
+              {/*<TableCell>{house.sign_id}</TableCell>*/}
               <TableCell>{formatDegree(house.degree)}</TableCell>
             </TableRow>
           ))}
@@ -285,11 +286,11 @@ function AspectsTable({ aspects }: { aspects: NatalAspect[] }) {
         <TableHead>
           <TableRow>
             <HeadCell>Планета</HeadCell>
-            <HeadCell>ID</HeadCell>
+            {/*<HeadCell>ID</HeadCell>*/}
             <HeadCell>Аспект</HeadCell>
-            <HeadCell>Тип</HeadCell>
+            {/*<HeadCell>Тип</HeadCell>*/}
             <HeadCell>К планете</HeadCell>
-            <HeadCell>ID</HeadCell>
+            {/*<HeadCell>ID</HeadCell>*/}
             <HeadCell>Орб</HeadCell>
             <HeadCell>Разница</HeadCell>
           </TableRow>
@@ -300,11 +301,11 @@ function AspectsTable({ aspects }: { aspects: NatalAspect[] }) {
               key={`${aspect.aspecting_planet}-${aspect.aspected_planet}-${index}`}
             >
               <TableCell>{aspect.aspecting_planet}</TableCell>
-              <TableCell>{aspect.aspecting_planet_id}</TableCell>
+              {/*<TableCell>{aspect.aspecting_planet_id}</TableCell>*/}
               <TableCell>{aspect.type}</TableCell>
-              <TableCell>{aspect.aspect_type}</TableCell>
-              <TableCell>{aspect.aspected_planet}</TableCell>
-              <TableCell>{aspect.aspected_planet_id}</TableCell>
+              {/*<TableCell>{aspect.aspect_type}</TableCell>*/}
+              <TableCell>{getAspectedPlanetName(aspect.aspected_planet)}</TableCell>
+              {/*<TableCell>{aspect.aspected_planet_id}</TableCell>*/}
               <TableCell>{formatDegree(aspect.orb)}</TableCell>
               <TableCell>{formatDegree(aspect.diff)}</TableCell>
             </TableRow>
@@ -320,7 +321,6 @@ function HeadCell({ children }: { children: ReactNode }) {
     <TableCell
       sx={{
         color: "text.secondary",
-        fontSize: "0.78rem",
         fontWeight: 700,
         textTransform: "uppercase",
         whiteSpace: "nowrap",

@@ -6,8 +6,17 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { ruRU } from "@mui/x-date-pickers/locales";
 import { useRouter } from "next/navigation";
 import type { Dayjs } from "dayjs";
+import "dayjs/locale/ru";
+
+const russianDatePickerLocaleText = {
+  ...ruRU.components.MuiLocalizationProvider.defaultProps.localeText,
+  fieldDayPlaceholder: () => "DD",
+  fieldMonthPlaceholder: () => "MM",
+  fieldYearPlaceholder: () => "YYYY",
+};
 
 export default function Home() {
   const router = useRouter();
@@ -125,16 +134,23 @@ export default function Home() {
             </Typography>
           </Box>
 
-          <DatePicker
-            label="Дата рождения"
-            value={birthDate}
-            onChange={(value) => setBirthDate(value)}
-            slotProps={{
-              textField: {
-                fullWidth: true,
-              },
-            }}
-          />
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale="ru"
+            localeText={russianDatePickerLocaleText}
+          >
+            <DatePicker
+              label="Дата рождения"
+              value={birthDate}
+              onChange={(value) => setBirthDate(value)}
+              format="DD/MM/YYYY"
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                },
+              }}
+            />
+          </LocalizationProvider>
 
           <TimePicker
             label="Время рождения"
