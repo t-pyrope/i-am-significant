@@ -1,0 +1,433 @@
+{
+  "planets": [
+    {
+      "name": "Солнце",
+      "full_degree": 45.5821,
+      "norm_degree": 15.5821,
+      "speed": 0.9686,
+      "is_retro": "false",
+      "sign_id": 2,
+      "sign": "Телец",
+      "house": 3
+    },
+    {
+      "name": "Луна",
+      "full_degree": 85.5573,
+      "norm_degree": 25.5573,
+      "speed": 14.0312,
+      "is_retro": "false",
+      "sign_id": 3,
+      "sign": "Близнецы",
+      "house": 4
+    },
+    {
+      "name": "Марс",
+      "full_degree": 359.967,
+      "norm_degree": 29.967,
+      "speed": 0.7674,
+      "is_retro": "false",
+      "sign_id": 12,
+      "sign": "Рыбах",
+      "house": 1
+    },
+    {
+      "name": "Меркурий",
+      "full_degree": 21.7001,
+      "norm_degree": 21.7001,
+      "speed": 1.4706,
+      "is_retro": "false",
+      "sign_id": 1,
+      "sign": "Овне",
+      "house": 2
+    },
+    {
+      "name": "Юпитер",
+      "full_degree": 154.6711,
+      "norm_degree": 4.6711,
+      "speed": 0.0156,
+      "is_retro": "false",
+      "sign_id": 6,
+      "sign": "Дева",
+      "house": 7
+    },
+    {
+      "name": "Венера",
+      "full_degree": 35.1727,
+      "norm_degree": 5.1727,
+      "speed": 1.2304,
+      "is_retro": "false",
+      "sign_id": 2,
+      "sign": "Телец",
+      "house": 2
+    },
+    {
+      "name": "Сатурн",
+      "full_degree": 318.069,
+      "norm_degree": 18.069,
+      "speed": 0.0367,
+      "is_retro": "false",
+      "sign_id": 11,
+      "sign": "Водолей",
+      "house": 12
+    },
+    {
+      "name": "Уран",
+      "full_degree": 287.9353,
+      "norm_degree": 17.9353,
+      "speed": -0.0115,
+      "is_retro": "true",
+      "sign_id": 10,
+      "sign": "Козерог",
+      "house": 11
+    },
+    {
+      "name": "Нептун",
+      "full_degree": 288.8937,
+      "norm_degree": 18.8937,
+      "speed": -0.0082,
+      "is_retro": "true",
+      "sign_id": 10,
+      "sign": "Козерог",
+      "house": 11
+    },
+    {
+      "name": "Плутон",
+      "full_degree": 231.7446,
+      "norm_degree": 21.7446,
+      "speed": -0.0277,
+      "is_retro": "true",
+      "sign_id": 8,
+      "sign": "Скорпионе",
+      "house": 9
+    },
+    {
+      "name": "Узел",
+      "full_degree": 271.4368,
+      "norm_degree": 1.4368,
+      "speed": -0.0114,
+      "is_retro": "true",
+      "sign_id": 10,
+      "sign": "Козерог",
+      "house": 11
+    },
+    {
+      "name": "Хирон",
+      "full_degree": 124.1437,
+      "norm_degree": 4.1437,
+      "speed": 0.0523,
+      "is_retro": "false",
+      "sign_id": 5,
+      "sign": "Лев",
+      "house": 6
+    },
+    {
+      "name": "Часть удачи",
+      "full_degree": 280.6781,
+      "norm_degree": 10.6781,
+      "speed": 0,
+      "is_retro": "false",
+      "sign_id": 10,
+      "sign": "Козерог",
+      "house": 11
+    }
+  ],
+  "houses": [
+    {
+      "house": 1,
+      "sign": "Водолей",
+      "sign_id": 11,
+      "degree": 320.65332
+    },
+    {
+      "house": 2,
+      "sign": "Овне",
+      "sign_id": 1,
+      "degree": 10.46976
+    },
+    {
+      "house": 3,
+      "sign": "Телец",
+      "sign_id": 2,
+      "degree": 44.75182
+    },
+    {
+      "house": 4,
+      "sign": "Близнецы",
+      "sign_id": 3,
+      "degree": 68.76962
+    },
+    {
+      "house": 5,
+      "sign": "Близнецы",
+      "sign_id": 3,
+      "degree": 89.21156
+    },
+    {
+      "house": 6,
+      "sign": "Раке",
+      "sign_id": 4,
+      "degree": 110.8061
+    },
+    {
+      "house": 7,
+      "sign": "Лев",
+      "sign_id": 5,
+      "degree": 140.65332
+    },
+    {
+      "house": 8,
+      "sign": "Весах",
+      "sign_id": 7,
+      "degree": 190.46976
+    },
+    {
+      "house": 9,
+      "sign": "Скорпионе",
+      "sign_id": 8,
+      "degree": 224.75182
+    },
+    {
+      "house": 10,
+      "sign": "Стрельце",
+      "sign_id": 9,
+      "degree": 248.76962
+    },
+    {
+      "house": 11,
+      "sign": "Стрельце",
+      "sign_id": 9,
+      "degree": 269.21156
+    },
+    {
+      "house": 12,
+      "sign": "Козерог",
+      "sign_id": 10,
+      "degree": 290.8061
+    }
+  ],
+  "ascendant": 320.65332468749864,
+  "midheaven": 248.76962493307903,
+  "vertex": 162.97526019436918,
+  "lilith": {
+    "name": "Lilith",
+    "full_degree": 311.689,
+    "norm_degree": 11.689,
+    "speed": 0.1113,
+    "is_retro": "false",
+    "sign_id": 11,
+    "sign": "Водолей",
+    "house": 12
+  },
+  "aspects": [
+    {
+      "aspecting_planet": "Солнце",
+      "aspected_planet": "Сатурн",
+      "aspecting_planet_id": 0,
+      "aspected_planet_id": 6,
+      "aspect_type": 4,
+      "type": "Квадрат",
+      "orb": 2.49,
+      "diff": 87.51
+    },
+    {
+      "aspecting_planet": "Солнце",
+      "aspected_planet": "Уран",
+      "aspecting_planet_id": 0,
+      "aspected_planet_id": 7,
+      "aspect_type": 3,
+      "type": "Трин",
+      "orb": 2.35,
+      "diff": 117.65
+    },
+    {
+      "aspecting_planet": "Солнце",
+      "aspected_planet": "Нептун",
+      "aspecting_planet_id": 0,
+      "aspected_planet_id": 8,
+      "aspect_type": 3,
+      "type": "Трин",
+      "orb": 3.31,
+      "diff": 116.69
+    },
+    {
+      "aspecting_planet": "Солнце",
+      "aspected_planet": "Плутон",
+      "aspecting_planet_id": 0,
+      "aspected_planet_id": 9,
+      "aspect_type": 2,
+      "type": "Оппозиция",
+      "orb": 6.16,
+      "diff": 173.84
+    },
+    {
+      "aspecting_planet": "Солнце",
+      "aspected_planet": "господствующий",
+      "aspecting_planet_id": 0,
+      "aspected_planet_id": 10,
+      "aspect_type": 4,
+      "type": "Квадрат",
+      "orb": 5.07,
+      "diff": 84.93
+    },
+    {
+      "aspecting_planet": "Луна",
+      "aspected_planet": "Марс",
+      "aspecting_planet_id": 1,
+      "aspected_planet_id": 2,
+      "aspect_type": 4,
+      "type": "Квадрат",
+      "orb": 4.41,
+      "diff": 85.59
+    },
+    {
+      "aspecting_planet": "Луна",
+      "aspected_planet": "Меркурий",
+      "aspecting_planet_id": 1,
+      "aspected_planet_id": 3,
+      "aspect_type": 5,
+      "type": "Секстиль",
+      "orb": 3.86,
+      "diff": 63.86
+    },
+    {
+      "aspecting_planet": "Луна",
+      "aspected_planet": "Сатурн",
+      "aspecting_planet_id": 1,
+      "aspected_planet_id": 6,
+      "aspect_type": 3,
+      "type": "Трин",
+      "orb": 7.49,
+      "diff": 127.49
+    },
+    {
+      "aspecting_planet": "Луна",
+      "aspected_planet": "господствующий",
+      "aspecting_planet_id": 1,
+      "aspected_planet_id": 10,
+      "aspect_type": 3,
+      "type": "Трин",
+      "orb": 4.9,
+      "diff": 124.9
+    },
+    {
+      "aspecting_planet": "Меркурий",
+      "aspected_planet": "Сатурн",
+      "aspecting_planet_id": 3,
+      "aspected_planet_id": 6,
+      "aspect_type": 5,
+      "type": "Секстиль",
+      "orb": 3.63,
+      "diff": 63.63
+    },
+    {
+      "aspecting_planet": "Меркурий",
+      "aspected_planet": "Уран",
+      "aspecting_planet_id": 3,
+      "aspected_planet_id": 7,
+      "aspect_type": 4,
+      "type": "Квадрат",
+      "orb": 3.76,
+      "diff": 93.76
+    },
+    {
+      "aspecting_planet": "Меркурий",
+      "aspected_planet": "Нептун",
+      "aspecting_planet_id": 3,
+      "aspected_planet_id": 8,
+      "aspect_type": 4,
+      "type": "Квадрат",
+      "orb": 2.81,
+      "diff": 92.81
+    },
+    {
+      "aspecting_planet": "Меркурий",
+      "aspected_planet": "господствующий",
+      "aspecting_planet_id": 3,
+      "aspected_planet_id": 10,
+      "aspect_type": 5,
+      "type": "Секстиль",
+      "orb": 1.05,
+      "diff": 61.05
+    },
+    {
+      "aspecting_planet": "Юпитер",
+      "aspected_planet": "Венера",
+      "aspecting_planet_id": 4,
+      "aspected_planet_id": 5,
+      "aspect_type": 3,
+      "type": "Трин",
+      "orb": 0.5,
+      "diff": 119.5
+    },
+    {
+      "aspecting_planet": "Юпитер",
+      "aspected_planet": "MC",
+      "aspecting_planet_id": 4,
+      "aspected_planet_id": 11,
+      "aspect_type": 4,
+      "type": "Квадрат",
+      "orb": 4.1,
+      "diff": 94.1
+    },
+    {
+      "aspecting_planet": "Сатурн",
+      "aspected_planet": "Плутон",
+      "aspecting_planet_id": 6,
+      "aspected_planet_id": 9,
+      "aspect_type": 4,
+      "type": "Квадрат",
+      "orb": 3.68,
+      "diff": 86.32
+    },
+    {
+      "aspecting_planet": "Сатурн",
+      "aspected_planet": "господствующий",
+      "aspecting_planet_id": 6,
+      "aspected_planet_id": 10,
+      "aspect_type": 1,
+      "type": "Соединение",
+      "orb": 2.58,
+      "diff": 2.58
+    },
+    {
+      "aspecting_planet": "Уран",
+      "aspected_planet": "Нептун",
+      "aspecting_planet_id": 7,
+      "aspected_planet_id": 8,
+      "aspect_type": 1,
+      "type": "Соединение",
+      "orb": 0.96,
+      "diff": 0.96
+    },
+    {
+      "aspecting_planet": "Уран",
+      "aspected_planet": "Плутон",
+      "aspecting_planet_id": 7,
+      "aspected_planet_id": 9,
+      "aspect_type": 5,
+      "type": "Секстиль",
+      "orb": 3.81,
+      "diff": 56.19
+    },
+    {
+      "aspecting_planet": "Нептун",
+      "aspected_planet": "Плутон",
+      "aspecting_planet_id": 8,
+      "aspected_planet_id": 9,
+      "aspect_type": 5,
+      "type": "Секстиль",
+      "orb": 2.85,
+      "diff": 57.15
+    },
+    {
+      "aspecting_planet": "Плутон",
+      "aspected_planet": "господствующий",
+      "aspecting_planet_id": 9,
+      "aspected_planet_id": 10,
+      "aspect_type": 4,
+      "type": "Квадрат",
+      "orb": 1.09,
+      "diff": 88.91
+    }
+  ]
+}
