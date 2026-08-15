@@ -8,11 +8,14 @@ export type AstrologyApiError = {
 };
 
 export type GeoLocation = {
-  place_name?: unknown;
+  formatted?: unknown;
   latitude?: unknown;
   longitude?: unknown;
-  timezone_id?: unknown;
-  country_code?: unknown;
+  timezone?:
+    | {
+        name?: unknown;
+      }
+    | unknown;
 };
 
 export function jsonError(
@@ -56,21 +59,6 @@ export async function parseJsonResponse(response: Response): Promise<unknown> {
   }
 }
 
-export function getFirstGeoLocation(value: unknown): GeoLocation | null {
-  if (
-    typeof value !== "object" ||
-    value === null ||
-    !("geonames" in value) ||
-    !Array.isArray(value.geonames) ||
-    value.geonames.length === 0
-  ) {
-    return null;
-  }
-
-  const [location] = value.geonames;
-  return typeof location === "object" && location !== null ? location : null;
-}
-
 export function toFiniteNumber(value: unknown): number | null {
   if (typeof value === "number" && Number.isFinite(value)) {
     return value;
@@ -85,8 +73,14 @@ export function toFiniteNumber(value: unknown): number | null {
 }
 
 export function getTimeZoneId(location: GeoLocation, lat: number, lon: number) {
-  if (typeof location.timezone_id === "string" && location.timezone_id.trim()) {
-    return location.timezone_id.trim();
+  if (
+    typeof location.timezone === "object" &&
+    location.timezone !== null &&
+    "name" in location.timezone &&
+    typeof location.timezone.name === "string" &&
+    location.timezone.name.trim()
+  ) {
+    return location.timezone.name.trim();
   }
 
   const [timeZoneId] = find(lat, lon);
@@ -140,16 +134,15 @@ function getUtcOffsetMinutes(timeZone: string, date: Date): number {
     hourCycle: "h23",
   });
 
-  const parts = formatter.formatToParts(date).reduce<Record<string, string>>(
-    (result, part) => {
+  const parts = formatter
+    .formatToParts(date)
+    .reduce<Record<string, string>>((result, part) => {
       if (part.type !== "literal") {
         result[part.type] = part.value;
       }
 
       return result;
-    },
-    {},
-  );
+    }, {});
 
   const zonedAsUtcMs = Date.UTC(
     Number(parts.year),

@@ -2,8 +2,8 @@ import {
   ASTROLOGY_API_BASE_URL,
   astrologyHeaders,
   getAstrologyApiKey,
-  getFirstGeoLocation,
   getTimeZoneId,
+  type GeoLocation,
   getUtcOffsetHoursForLocalTime,
   jsonError,
   parseJsonResponse,
@@ -15,7 +15,7 @@ export const runtime = "nodejs";
 type BirthPayload = {
   birthDate?: unknown;
   birthTime?: unknown;
-  geoResponse?: unknown;
+  location?: unknown;
 };
 
 export async function POST(request: Request) {
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     return jsonError("Birth time is required.", 400);
   }
 
-  const location = getFirstGeoLocation(body.geoResponse);
+  const location = asGeoLocation(body.location);
 
   if (!location) {
     return jsonError("No matching city found.", 400);
@@ -102,8 +102,7 @@ export async function POST(request: Request) {
     JSON.stringify(
       {
         ...natalRequest,
-        place: location.place_name,
-        country_code: location.country_code,
+        place: location.formatted,
         timezone_id: timeZone,
       },
       null,
@@ -137,10 +136,20 @@ export async function POST(request: Request) {
   }
 
   if (typeof natalResponse !== "object" || natalResponse === null) {
-    return jsonError("AstrologyAPI natal response is invalid.", 502, natalResponse);
+    return jsonError(
+      "AstrologyAPI natal response is invalid.",
+      502,
+      natalResponse,
+    );
   }
 
   return Response.json(natalResponse);
+}
+
+function asGeoLocation(value: unknown): GeoLocation | null {
+  return typeof value === "object" && value !== null
+    ? (value as GeoLocation)
+    : null;
 }
 
 function parseDateParts(value: string) {

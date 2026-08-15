@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -18,11 +26,24 @@ const russianDatePickerLocaleText = {
   fieldYearPlaceholder: () => "YYYY",
 };
 
+type CitySuggestion = {
+  formatted: string;
+  latitude: number;
+  longitude: number;
+  timezone?: {
+    name: string;
+  };
+};
+
 export default function Home() {
   const router = useRouter();
   const [birthDate, setBirthDate] = useState<Dayjs | null>(null);
   const [birthTime, setBirthTime] = useState<Dayjs | null>(null);
   const [birthCity, setBirthCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState<CitySuggestion | null>(null);
+  const [citySuggestions, setCitySuggestions] = useState<CitySuggestion[]>([]);
+  const [isSearchingCities, setIsSearchingCities] = useState(false);
+  const [citySearchError, setCitySearchError] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,10 +62,59 @@ export default function Home() {
     }
   }, [router]);
 
+  useEffect(() => {
+    const city = birthCity.trim();
+
+    if (!city) {
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(async () => {
+      setIsSearchingCities(true);
+      setCitySearchError("");
+
+      try {
+        const response = await fetch(
+          `/api/geoapify/autocomplete?city=${encodeURIComponent(city)}`,
+          { signal: controller.signal },
+        );
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok) {
+          throw new Error(getErrorMessage(data));
+        }
+
+        setCitySuggestions(isCitySuggestionsResponse(data) ? data.results : []);
+      } catch (requestError) {
+        if (
+          requestError instanceof DOMException &&
+          requestError.name === "AbortError"
+        ) {
+          return;
+        }
+
+        setCitySuggestions([]);
+        setCitySearchError(
+          requestError instanceof Error
+            ? requestError.message
+            : "Не удалось найти город.",
+        );
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsSearchingCities(false);
+        }
+      }
+    }, 300);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
+  }, [birthCity]);
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    const city = birthCity.trim();
 
     if (!birthDate) {
       setError("Выберите дату рождения.");
@@ -56,8 +126,8 @@ export default function Home() {
       return;
     }
 
-    if (!city) {
-      setError("Введите город рождения на английском.");
+    if (!selectedCity) {
+      setError("Выберите город рождения из списка.");
       return;
     }
 
@@ -65,12 +135,10 @@ export default function Home() {
     setIsSubmitting(true);
 
     try {
-      const geoResponse = await postJson("/api/astrology/geo", { city });
-
       const natalResponse = await postJson("/api/astrology/natal", {
         birthDate: birthDate.format("YYYY-MM-DD"),
         birthTime: birthTime.format("HH:mm"),
-        geoResponse,
+        location: selectedCity,
       });
 
       localStorage.setItem("natalChart", JSON.stringify(natalResponse));
@@ -167,12 +235,68 @@ export default function Home() {
             }}
           />
 
-          <TextField
-            fullWidth
-            label="Город рождения (на английском)"
-            placeholder="London"
-            value={birthCity}
-            onChange={(event) => setBirthCity(event.target.value)}
+          <Autocomplete<CitySuggestion, false, false, false>
+            options={birthCity.trim() ? citySuggestions : []}
+            value={selectedCity}
+            inputValue={birthCity}
+            loading={isSearchingCities}
+            noOptionsText={
+              citySearchError ||
+              (birthCity.trim() ? "Города не найдены" : "Начните вводить город")
+            }
+            loadingText="Ищем города..."
+            getOptionLabel={(option) => option.formatted}
+            isOptionEqualToValue={(option, value) =>
+              option.latitude === value.latitude &&
+              option.longitude === value.longitude
+            }
+            onChange={(_event, city) => {
+              setSelectedCity(city);
+              setCitySearchError("");
+
+              if (city) {
+                setBirthCity(city.formatted);
+              }
+            }}
+            onInputChange={(_event, value, reason) => {
+              setBirthCity(value);
+
+              if (reason === "input" || reason === "clear") {
+                setSelectedCity(null);
+              }
+
+              if (!value.trim()) {
+                setCitySuggestions([]);
+                setCitySearchError("");
+                setIsSearchingCities(false);
+              }
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                fullWidth
+                label="Город рождения"
+                placeholder="Прага, Ташкент, Лондон"
+                error={Boolean(citySearchError)}
+                helperText={
+                  citySearchError || "Выберите подходящий вариант из списка"
+                }
+                slotProps={{
+                  ...params.slotProps,
+                  input: {
+                    ...params.slotProps.input,
+                    endAdornment: (
+                      <>
+                        {isSearchingCities ? (
+                          <CircularProgress size={20} />
+                        ) : null}
+                        {params.slotProps.input.endAdornment}
+                      </>
+                    ),
+                  },
+                }}
+              />
+            )}
           />
 
           <Button
@@ -232,4 +356,26 @@ function getErrorMessage(data: unknown) {
   }
 
   return "Не удалось отправить данные.";
+}
+
+function isCitySuggestionsResponse(
+  data: unknown,
+): data is { results: CitySuggestion[] } {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    "results" in data &&
+    Array.isArray(data.results) &&
+    data.results.every(
+      (result) =>
+        typeof result === "object" &&
+        result !== null &&
+        "formatted" in result &&
+        typeof result.formatted === "string" &&
+        "latitude" in result &&
+        typeof result.latitude === "number" &&
+        "longitude" in result &&
+        typeof result.longitude === "number",
+    )
+  );
 }
