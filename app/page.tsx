@@ -187,24 +187,57 @@ export default function Home() {
             <Typography
               component="h1"
               sx={{
-                fontFamily: "Georgia, 'Times New Roman', serif",
-                fontSize: { xs: "2.45rem", sm: "3rem" },
+                color: "#CEB687",
                 fontWeight: 400,
-                lineHeight: 1.08,
+                lineHeight: 1,
               }}
             >
-              Natalia astro psychology Prague
+              <Box
+                component="span"
+                sx={{
+                  display: "block",
+                  fontFamily: "var(--font-playfair-display), serif",
+                  fontSize: { xs: "4.6rem" },
+                  letterSpacing: "0.08em",
+                  lineHeight: 1,
+                }}
+              >
+                NATALIA
+              </Box>
+              <Box
+                component="span"
+                sx={{
+                  display: "block",
+                  fontFamily: "var(--font-playfair-display), serif",
+                  fontSize: { xs: "2rem" },
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.1,
+                  textTransform: "uppercase",
+                }}
+              >
+                astro psychology
+              </Box>
+              <Box
+                component="span"
+                sx={{
+                  display: "block",
+                  fontFamily: "var(--font-pinyon-script), cursive",
+                  fontSize: { xs: "2rem" },
+                }}
+              >
+                Prague
+              </Box>
             </Typography>
             <Typography
               component="p"
               sx={{
                 mt: 1.5,
                 fontSize: "1rem",
-                lineHeight: 1.6,
+                lineHeight: 1.3,
               }}
             >
               Узнай, через что приходят деньги и какие способности помогут
-              увеличить доход - индивидуально по твоей натальной карте!
+              увеличить доход - индивидуально по твоей натальной карте
             </Typography>
           </Box>
 

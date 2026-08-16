@@ -23,6 +23,9 @@ const theme = createTheme({
     h1: {
       color: "#CEB687",
     },
+    h2: {
+      color: "#CEB687",
+    },
   },
   components: {
     MuiButtonBase: {
