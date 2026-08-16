@@ -69,8 +69,11 @@ function MoneyReport({ chart }: { chart: NatalChart }) {
 
   const solarSign = chart.planets.find((planet) => planet.name === "Солнце");
   const moonSign = chart.planets.find((planet) => planet.name === "Луна");
+  const solarSignRuler = RULERS.find(
+    (item) => item.sign_id === solarSign?.sign_id,
+  );
   const realisationWaySign = realisationWays.find(
-    (way) => way.sign === solarSign?.sign,
+    (way) => way.sign_id === solarSignRuler?.sign_id,
   );
   const secondHouse = chart.houses.find((house) => house.house === 2);
   const moneyWaySign = moneyWays.find(
@@ -88,6 +91,11 @@ function MoneyReport({ chart }: { chart: NatalChart }) {
     })
     .filter((planet): planet is NonNullable<typeof planet> => planet !== null);
 
+  const startAgain = () => {
+    localStorage.removeItem(natalStorageKey);
+    router.replace("/");
+  };
+
   if (
     !solarSign ||
     !moonSign ||
@@ -97,16 +105,16 @@ function MoneyReport({ chart }: { chart: NatalChart }) {
     !ruler
   ) {
     return (
-      <Typography color="text.secondary">
-        В натальной карте не хватает данных для денежного разбора.
-      </Typography>
+      <Stack spacing={2} sx={{ alignItems: "flex-start" }}>
+        <Typography color="text.secondary">
+          В натальной карте не хватает данных для денежного разбора.
+        </Typography>
+        <Button onClick={startAgain} variant="contained">
+          Попробовать еще раз
+        </Button>
+      </Stack>
     );
   }
-
-  const startAgain = () => {
-    localStorage.clear();
-    router.replace("/");
-  };
 
   return (
     <Stack spacing={5}>
