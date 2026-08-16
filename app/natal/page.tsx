@@ -1,34 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import type { ReactNode } from "react";
-import {
-  AppBar,
-  Box,
-  Button,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import {
-  formatDegree,
-  formatNumber,
-  formatRetrograde,
-  isNatalChart,
-  type NatalAspect,
-  type NatalBody,
-  type NatalChart,
-  type NatalHouse,
-} from "./types";
-import { getAspectedPlanetName } from "@/app/natal/utils";
-import { useRouter } from "next/navigation";
+import { Box, Stack, Typography } from "@mui/material";
+import realisationWays from "@/app/docs/01-way-of-realisation.json";
+import moneyWays from "@/app/docs/02-how-make-money.json";
+import rulerWays from "@/app/docs/03-ruler.json";
+import { RULERS } from "./constants";
+import { getAscendantPlanetName } from "./utils";
+import { isNatalChart, type NatalChart } from "./types";
 
 const natalStorageKey = "natalChart";
 
@@ -40,178 +19,154 @@ export default function NatalPage() {
     queueMicrotask(() => {
       const savedNatalChart = localStorage.getItem(natalStorageKey);
 
-      if (!savedNatalChart) {
-        setHasCheckedStorage(true);
-        return;
-      }
+      if (savedNatalChart) {
+        try {
+          const parsed: unknown = JSON.parse(savedNatalChart);
 
-      try {
-        const parsed: unknown = JSON.parse(savedNatalChart);
-
-        if (isNatalChart(parsed)) {
-          setChart(parsed);
-        } else {
+          if (isNatalChart(parsed)) {
+            setChart(parsed);
+          } else {
+            localStorage.removeItem(natalStorageKey);
+          }
+        } catch {
           localStorage.removeItem(natalStorageKey);
         }
-      } catch {
-        localStorage.removeItem(natalStorageKey);
-      } finally {
-        setHasCheckedStorage(true);
       }
+
+      setHasCheckedStorage(true);
     });
   }, []);
 
   return (
-    <Box sx={{ minHeight: "100svh", bgcolor: "var(--background)" }}>
-      <AppBar color="inherit" elevation={0}>
-        <Toolbar>
-          <Typography
-            component="h6"
-            sx={{
-              fontFamily: "Georgia, 'Times New Roman', serif",
-              fontSize: "1.2rem",
-              color: "text.primary",
-            }}
-          >
-            i am significant
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Toolbar />
-
-      <Box
-        component="main"
-        sx={{
-          width: "100%",
-          maxWidth: 1120,
-          mx: "auto",
-          px: { xs: 3, sm: 4 },
-          py: { xs: 4, sm: 6 },
-        }}
-      >
-        {!hasCheckedStorage ? <LoadingState /> : null}
-        {hasCheckedStorage && !chart ? <UnavailableState /> : null}
-        {hasCheckedStorage && chart ? (
-          <NatalChartContent chart={chart} />
-        ) : null}
-      </Box>
+    <Box
+      component="main"
+      sx={{
+        minHeight: "100svh",
+        maxWidth: 800,
+        mx: "auto",
+        px: { xs: 3, sm: 4 },
+        py: { xs: 4, sm: 6 },
+      }}
+    >
+      {!hasCheckedStorage ? (
+        <Typography color="text.secondary">Загружаем натальную карту...</Typography>
+      ) : null}
+      {hasCheckedStorage && chart ? <MoneyReport chart={chart} /> : null}
+      {hasCheckedStorage && !chart ? (
+        <Typography color="text.secondary">
+          Натальная карта недоступна.
+        </Typography>
+      ) : null}
     </Box>
   );
 }
 
-function LoadingState() {
-  return (
-    <Typography color="text.secondary" sx={{ fontSize: "1rem" }}>
-      Загружаем натальную карту...
-    </Typography>
+function MoneyReport({ chart }: { chart: NatalChart }) {
+  const solarSign = chart.planets.find((planet) => planet.name === "Солнце");
+  const moonSign = chart.planets.find((planet) => planet.name === "Луна");
+  const realisationWaySign = realisationWays.find(
+    (way) => way.sign === solarSign?.sign,
   );
-}
+  const secondHouse = chart.houses.find((house) => house.house === 2);
+  const moneyWaySign = moneyWays.find(
+    (way) => way.sign_id === secondHouse?.sign_id,
+  );
+  const ruler = RULERS.find((item) => item.sign_id === secondHouse?.sign_id);
+  const rulerPlanets = chart.planets.filter((planet) =>
+    ruler?.rulers.includes(planet.name as never),
+  );
+  const rulerPlanetsWithWays = rulerPlanets
+    .map((planet) => {
+      const rulerWay = rulerWays.find((way) => way.house === planet.house);
 
-function UnavailableState() {
+      return rulerWay ? { ...planet, ...rulerWay } : null;
+    })
+    .filter((planet): planet is NonNullable<typeof planet> => planet !== null);
+
+  if (
+    !solarSign ||
+    !moonSign ||
+    !realisationWaySign ||
+    !secondHouse ||
+    !moneyWaySign ||
+    !ruler
+  ) {
+    return (
+      <Typography color="text.secondary">
+        В натальной карте не хватает данных для денежного разбора.
+      </Typography>
+    );
+  }
+
   return (
-    <Stack spacing={3} sx={{ alignItems: "flex-start" }}>
+    <Stack spacing={5}>
       <Box>
-        <Typography
-          component="h1"
-          sx={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontSize: { xs: "2rem", sm: "2.6rem" },
-            fontWeight: 400,
-            lineHeight: 1.12,
-          }}
-        >
-          Натальная карта недоступна
-        </Typography>
-        <Typography color="text.secondary" sx={{ mt: 1.5, lineHeight: 1.7 }}>
-          Сохраненные данные не найдены. Вернитесь на главную страницу и
-          рассчитайте карту заново.
-        </Typography>
-      </Box>
-      <Button component={Link} href="/" variant="contained" disableElevation>
-        Вернуться на главную
-      </Button>
-    </Stack>
-  );
-}
-
-function NatalChartContent({ chart }: { chart: NatalChart }) {
-  const router = useRouter();
-
-  const startAgain = () => {
-    localStorage.clear();
-    router.replace("/");
-  };
-
-  return (
-    <Stack spacing={{ xs: 5, sm: 6 }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
         <Typography
           component="h1"
           sx={{
             fontFamily: "Georgia, 'Times New Roman', serif",
             fontSize: { xs: "2.25rem", sm: "3rem" },
             fontWeight: 400,
-            lineHeight: 1.08,
           }}
         >
-          Натальная карта
+          {solarSign.sign}
         </Typography>
-        <Button onClick={startAgain} variant="contained" color="error">
-          Начать сначала
-        </Button>
+        <Typography>Асцендент: {getAscendantPlanetName(chart.houses)}</Typography>
+        <Typography>Луна: {moonSign.sign}</Typography>
       </Box>
 
-      <Section title="Обзор карты">
-        <TableContainer sx={tableContainerSx}>
-          <Table>
-            <TableBody>
-              <OverviewRow label="Асцендент (ASC)" value={chart.ascendant} />
-              <OverviewRow label="Середина неба (MC)" value={chart.midheaven} />
-              <OverviewRow label="Вертекс (Vertex)" value={chart.vertex} />
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Section>
+      <ReportSection title="Каким способом реализуется сфера денег?">
+        <Typography component="h3" variant="h5" sx={{ mb: 1 }}>
+          {solarSign.sign} — {realisationWaySign.title}
+        </Typography>
+        <Points points={realisationWaySign.realisation} />
+        <Typography component="p" sx={{ fontWeight: 700, fontStyle: "italic" }}>
+          Ключ: {realisationWaySign.key}
+        </Typography>
+      </ReportSection>
 
-      <Section title="Планеты">
-        <BodiesTable bodies={chart.planets} />
-      </Section>
+      <ReportSection title="Как ты зарабатываешь?">
+        <Typography component="h3" variant="h5" sx={{ mb: 1 }}>
+          2 дом {moneyWaySign.title}. Деньги приходят через
+        </Typography>
+        <Points points={moneyWaySign.points} />
+        <Typography component="p" sx={{ fontWeight: 700, fontStyle: "italic" }}>
+          Фраза: &quot;{moneyWaySign.key}&quot;
+        </Typography>
+      </ReportSection>
 
-      <Section title="Дома">
-        <HousesTable houses={chart.houses} />
-      </Section>
-
-      {chart.lilith ? (
-        <Section title="Lilith">
-          <BodiesTable bodies={[chart.lilith]} />
-        </Section>
-      ) : null}
-
-      <Section title="Аспекты">
-        <AspectsTable aspects={chart.aspects} />
-      </Section>
+      <ReportSection title="Деньги через управителя 2 дома">
+        <Stack spacing={3}>
+          {rulerPlanetsWithWays.map((element) => (
+            <Box key={`${element.name}-${element.house}`}>
+              <Typography component="h3" variant="h5" sx={{ mb: 1 }}>
+                Управитель {element.name} {element.title}
+              </Typography>
+              <Typography component="p">
+                {element.way ? `${element.way} ` : ""}Фразы:
+              </Typography>
+              <Points points={element.points} />
+              <Typography component="p" sx={{ fontWeight: 700, fontStyle: "italic" }}>
+                Пример: {element.example}
+              </Typography>
+            </Box>
+          ))}
+        </Stack>
+      </ReportSection>
     </Stack>
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function ReportSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <Box component="section">
-      <Typography
-        component="h2"
-        sx={{
-          mb: 2,
-          fontFamily: "Georgia, 'Times New Roman', serif",
-          fontSize: { xs: "1.5rem", sm: "1.8rem" },
-          fontWeight: 400,
-        }}
-      >
+      <Typography component="h2" variant="h4" sx={{ mb: 2 }}>
         {title}
       </Typography>
       {children}
@@ -219,134 +174,12 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function OverviewRow({ label, value }: { label: string; value: number }) {
+function Points({ points }: { points: string[] }) {
   return (
-    <TableRow>
-      <TableCell sx={{ width: "40%", fontWeight: 600 }}>{label}</TableCell>
-      <TableCell>{formatDegree(value)}</TableCell>
-    </TableRow>
+    <Box component="ul" sx={{ mt: 0, mb: 2, pl: 3 }}>
+      {points.map((point) => (
+        <li key={point}>{point}</li>
+      ))}
+    </Box>
   );
 }
-
-function BodiesTable({ bodies }: { bodies: NatalBody[] }) {
-  return (
-    <TableContainer sx={tableContainerSx}>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <HeadCell>Название</HeadCell>
-            <HeadCell>Полный градус</HeadCell>
-            <HeadCell>Градус в знаке</HeadCell>
-            {/*<HeadCell>ID знака</HeadCell>*/}
-            <HeadCell>Знак</HeadCell>
-            <HeadCell>Дом</HeadCell>
-            <HeadCell>Скорость</HeadCell>
-            <HeadCell>Движение</HeadCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {bodies.map((body) => (
-            <TableRow key={`${body.name}-${body.full_degree}`}>
-              <TableCell>{body.name}</TableCell>
-              <TableCell>{formatDegree(body.full_degree)}</TableCell>
-              <TableCell>{formatDegree(body.norm_degree)}</TableCell>
-              {/*<TableCell>{body.sign_id}</TableCell>*/}
-              <TableCell>{body.sign}</TableCell>
-              <TableCell>{body.house}</TableCell>
-              <TableCell>{formatNumber(body.speed)}</TableCell>
-              <TableCell>{formatRetrograde(body.is_retro)}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
-
-function HousesTable({ houses }: { houses: NatalHouse[] }) {
-  return (
-    <TableContainer sx={tableContainerSx}>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <HeadCell>Дом</HeadCell>
-            <HeadCell>Знак</HeadCell>
-            {/*<HeadCell>ID знака</HeadCell>*/}
-            <HeadCell>Градус</HeadCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {houses.map((house) => (
-            <TableRow key={house.house}>
-              <TableCell>{house.house}</TableCell>
-              <TableCell>{house.sign}</TableCell>
-              {/*<TableCell>{house.sign_id}</TableCell>*/}
-              <TableCell>{formatDegree(house.degree)}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
-
-function AspectsTable({ aspects }: { aspects: NatalAspect[] }) {
-  return (
-    <TableContainer sx={tableContainerSx}>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <HeadCell>Планета</HeadCell>
-            {/*<HeadCell>ID</HeadCell>*/}
-            <HeadCell>Аспект</HeadCell>
-            {/*<HeadCell>Тип</HeadCell>*/}
-            <HeadCell>К планете</HeadCell>
-            {/*<HeadCell>ID</HeadCell>*/}
-            <HeadCell>Орб</HeadCell>
-            <HeadCell>Разница</HeadCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {aspects.map((aspect, index) => (
-            <TableRow
-              key={`${aspect.aspecting_planet}-${aspect.aspected_planet}-${index}`}
-            >
-              <TableCell>{aspect.aspecting_planet}</TableCell>
-              {/*<TableCell>{aspect.aspecting_planet_id}</TableCell>*/}
-              <TableCell>{aspect.type}</TableCell>
-              {/*<TableCell>{aspect.aspect_type}</TableCell>*/}
-              <TableCell>
-                {getAspectedPlanetName(aspect.aspected_planet)}
-              </TableCell>
-              {/*<TableCell>{aspect.aspected_planet_id}</TableCell>*/}
-              <TableCell>{formatDegree(aspect.orb)}</TableCell>
-              <TableCell>{formatDegree(aspect.diff)}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
-
-function HeadCell({ children }: { children: ReactNode }) {
-  return (
-    <TableCell
-      sx={{
-        color: "text.secondary",
-        fontWeight: 700,
-        textTransform: "uppercase",
-        whiteSpace: "nowrap",
-      }}
-    >
-      {children}
-    </TableCell>
-  );
-}
-
-const tableContainerSx = {
-  border: "1px solid rgba(31, 26, 23, 0.14)",
-  borderRadius: 1,
-  overflowX: "auto",
-  bgcolor: "rgba(255, 255, 255, 0.35)",
-};

@@ -246,7 +246,7 @@ export default function Home() {
             loading={isSearchingCities}
             noOptionsText={
               citySearchError ||
-              (birthCity.trim() ? "Города не найдены" : "Начните вводить город")
+              (birthCity.trim() ? "Города не найдены" : "Начни вводить город")
             }
             loadingText="Ищем города..."
             getOptionLabel={(option) => option.formatted}
