@@ -1,19 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import realisationWays from "@/app/docs/01-way-of-realisation.json";
 import moneyWays from "@/app/docs/02-how-make-money.json";
 import rulerWays from "@/app/docs/03-ruler.json";
 import { RULERS } from "./constants";
 import { getAscendantPlanetName } from "./utils";
 import { isNatalChart, type NatalChart } from "./types";
+import { useRouter } from "next/navigation";
 
 const natalStorageKey = "natalChart";
 
 export default function NatalPage() {
   const [chart, setChart] = useState<NatalChart | null>(null);
   const [hasCheckedStorage, setHasCheckedStorage] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -27,15 +29,19 @@ export default function NatalPage() {
             setChart(parsed);
           } else {
             localStorage.removeItem(natalStorageKey);
+            router.replace("/");
           }
         } catch {
           localStorage.removeItem(natalStorageKey);
+          router.replace("/");
         }
+      } else {
+        router.replace("/");
       }
 
       setHasCheckedStorage(true);
     });
-  }, []);
+  }, [router]);
 
   return (
     <Box
@@ -49,19 +55,18 @@ export default function NatalPage() {
       }}
     >
       {!hasCheckedStorage ? (
-        <Typography color="text.secondary">Загружаем натальную карту...</Typography>
-      ) : null}
-      {hasCheckedStorage && chart ? <MoneyReport chart={chart} /> : null}
-      {hasCheckedStorage && !chart ? (
         <Typography color="text.secondary">
-          Натальная карта недоступна.
+          Загружаем натальную карту...
         </Typography>
       ) : null}
+      {hasCheckedStorage && chart ? <MoneyReport chart={chart} /> : null}
     </Box>
   );
 }
 
 function MoneyReport({ chart }: { chart: NatalChart }) {
+  const router = useRouter();
+
   const solarSign = chart.planets.find((planet) => planet.name === "Солнце");
   const moonSign = chart.planets.find((planet) => planet.name === "Луна");
   const realisationWaySign = realisationWays.find(
@@ -98,6 +103,11 @@ function MoneyReport({ chart }: { chart: NatalChart }) {
     );
   }
 
+  const startAgain = () => {
+    localStorage.clear();
+    router.replace("/");
+  };
+
   return (
     <Stack spacing={5}>
       <Box>
@@ -111,7 +121,9 @@ function MoneyReport({ chart }: { chart: NatalChart }) {
         >
           {solarSign.sign}
         </Typography>
-        <Typography>Асцендент: {getAscendantPlanetName(chart.houses)}</Typography>
+        <Typography>
+          Асцендент: {getAscendantPlanetName(chart.houses)}
+        </Typography>
         <Typography>Луна: {moonSign.sign}</Typography>
       </Box>
 
@@ -143,14 +155,34 @@ function MoneyReport({ chart }: { chart: NatalChart }) {
                 Управитель {element.name} {element.title}
               </Typography>
               <Typography component="p">
-                {element.way ? `${element.way} ` : ""}Фразы:
+                {element.way ? `${element.way}. ` : ""}Фразы:
               </Typography>
               <Points points={element.points} />
-              <Typography component="p" sx={{ fontWeight: 700, fontStyle: "italic" }}>
+              <Typography
+                component="p"
+                sx={{ fontWeight: 700, fontStyle: "italic" }}
+              >
                 Пример: {element.example}
               </Typography>
             </Box>
           ))}
+
+          <Box>
+            <Button onClick={startAgain} variant="contained" color="error">
+              Начать сначала
+            </Button>
+          </Box>
+        </Stack>
+      </ReportSection>
+
+      <ReportSection title="Понравилась информация?">
+        <Stack spacing={3}>
+          <Typography>
+            Узнай, как действовать, чтобы притянуть удачу в свою жизнь — в
+            карьере и отношениях{" "}
+            <span style={{ fontStyle: "italic" }}>(в разработке)</span>
+          </Typography>
+          <Button variant="contained">Заказать за 200 крон</Button>
         </Stack>
       </ReportSection>
     </Stack>

@@ -20,13 +20,6 @@ import { useRouter } from "next/navigation";
 import type { Dayjs } from "dayjs";
 import "dayjs/locale/ru";
 
-const russianDatePickerLocaleText = {
-  ...ruRU.components.MuiLocalizationProvider.defaultProps.localeText,
-  fieldDayPlaceholder: () => "ДД",
-  fieldMonthPlaceholder: () => "ММ",
-  fieldYearPlaceholder: () => "ГГГГ",
-};
-
 type CitySuggestion = {
   formatted: string;
   latitude: number;
@@ -237,14 +230,16 @@ export default function Home() {
               }}
             >
               Узнай, через что приходят деньги и какие способности помогут
-              увеличить доход - индивидуально по твоей натальной карте
+              увеличить доход — индивидуально по твоей натальной карте
             </Typography>
           </Box>
 
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
             adapterLocale="ru"
-            localeText={russianDatePickerLocaleText}
+            localeText={
+              ruRU.components.MuiLocalizationProvider.defaultProps.localeText
+            }
           >
             <DatePicker
               label="Дата рождения"
@@ -257,20 +252,20 @@ export default function Home() {
                 },
               }}
             />
-          </LocalizationProvider>
 
-          <TimePicker
-            label="Время рождения"
-            value={birthTime}
-            onChange={(value) => setBirthTime(value)}
-            ampm={false}
-            format="HH:mm"
-            slotProps={{
-              textField: {
-                fullWidth: true,
-              },
-            }}
-          />
+            <TimePicker
+              label="Время рождения"
+              value={birthTime}
+              onChange={(value) => setBirthTime(value)}
+              ampm={false}
+              format="HH:mm"
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                },
+              }}
+            />
+          </LocalizationProvider>
 
           <Autocomplete<CitySuggestion, false, false, false>
             options={birthCity.trim() ? citySuggestions : []}
@@ -343,9 +338,6 @@ export default function Home() {
             sx={{
               mt: 1,
               py: 1.35,
-              borderRadius: 1,
-              textTransform: "none",
-              fontSize: "1rem",
             }}
           >
             {isSubmitting ? "Отправляем..." : "Узнай свой натал"}

@@ -37,6 +37,13 @@ const theme = createTheme({
       defaultProps: {
         disableRipple: true,
       },
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
+          textTransform: "none",
+          fontSize: "1rem",
+        },
+      },
     },
     MuiInputLabel: {
       styleOverrides: {

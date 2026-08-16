@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | Natalia astro psychology Prague",
   },
   description:
-    "Узнай, через что приходят деньги и какие способности помогут увеличить доход - индивидуально по твоей натальной карте",
+    "Узнай, через что приходят деньги и какие способности помогут увеличить доход — индивидуально по твоей натальной карте",
   robots: {
     index: true,
     follow: true,
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Natalia astro psychology Prague",
     description:
-      "Узнай, через что приходят деньги и какие способности помогут увеличить доход - индивидуально по твоей натальной карте",
+      "Узнай, через что приходят деньги и какие способности помогут увеличить доход — индивидуально по твоей натальной карте",
     type: "website",
     locale: "ru_RU",
     siteName: "Natalia astro psychology Prague",
