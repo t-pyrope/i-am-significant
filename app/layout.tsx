@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AppThemeProvider from "./theme-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.i-am-significant.com"),
@@ -34,7 +35,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ru">
-      <body>{children}</body>
+      <body>
+        <AppThemeProvider>{children}</AppThemeProvider>
+      </body>
     </html>
   );
 }

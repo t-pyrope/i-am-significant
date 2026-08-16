@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Autocomplete,
+  Avatar,
   Box,
   Button,
   CircularProgress,
@@ -21,9 +22,9 @@ import "dayjs/locale/ru";
 
 const russianDatePickerLocaleText = {
   ...ruRU.components.MuiLocalizationProvider.defaultProps.localeText,
-  fieldDayPlaceholder: () => "DD",
-  fieldMonthPlaceholder: () => "MM",
-  fieldYearPlaceholder: () => "YYYY",
+  fieldDayPlaceholder: () => "ДД",
+  fieldMonthPlaceholder: () => "ММ",
+  fieldYearPlaceholder: () => "ГГГГ",
 };
 
 type CitySuggestion = {
@@ -117,17 +118,17 @@ export default function Home() {
     event.preventDefault();
 
     if (!birthDate) {
-      setError("Выберите дату рождения.");
+      setError("Выбери дату рождения.");
       return;
     }
 
     if (!birthTime) {
-      setError("Выберите время рождения.");
+      setError("Выбери время рождения.");
       return;
     }
 
     if (!selectedCity) {
-      setError("Выберите город рождения из списка.");
+      setError("Выбери город рождения из списка.");
       return;
     }
 
@@ -178,29 +179,32 @@ export default function Home() {
           }}
         >
           <Box sx={{ textAlign: "center", mb: 1 }}>
+            <Avatar
+              alt="Natalia"
+              src="/avatar.jpg"
+              sx={{ width: 104, height: 104, mx: "auto", mb: 2 }}
+            />
             <Typography
-              component="h6"
+              component="h1"
               sx={{
-                color: "text.primary",
                 fontFamily: "Georgia, 'Times New Roman', serif",
                 fontSize: { xs: "2.45rem", sm: "3rem" },
                 fontWeight: 400,
                 lineHeight: 1.08,
               }}
             >
-              i am significant
+              Natalia astro psychology Prague
             </Typography>
             <Typography
-              component="h1"
-              color="text.secondary"
+              component="p"
               sx={{
                 mt: 1.5,
                 fontSize: "1rem",
                 lineHeight: 1.6,
               }}
             >
-              Рассчитайте натальную карту по дате, точному времени и месту
-              рождения
+              Узнай, через что приходят деньги и какие способности помогут
+              увеличить доход - индивидуально по твоей натальной карте!
             </Typography>
           </Box>
 
@@ -278,9 +282,7 @@ export default function Home() {
                 label="Город рождения"
                 placeholder="Прага, Ташкент, Лондон"
                 error={Boolean(citySearchError)}
-                helperText={
-                  citySearchError || "Выберите подходящий вариант из списка"
-                }
+                helperText={citySearchError}
                 slotProps={{
                   ...params.slotProps,
                   input: {
@@ -313,7 +315,7 @@ export default function Home() {
               fontSize: "1rem",
             }}
           >
-            {isSubmitting ? "Отправляем..." : "Узнать свой натал"}
+            {isSubmitting ? "Отправляем..." : "Узнай свой натал"}
           </Button>
 
           {error ? (
