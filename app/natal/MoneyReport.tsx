@@ -1,4 +1,4 @@
-import type { NatalChart } from "@/app/natal/types";
+import type { NatalChart } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { NATAL_STORAGE_KEY, RULERS } from "@/app/natal/constants";
 import realisationWays from "@/app/docs/01-way-of-realisation.json";
@@ -13,6 +13,8 @@ import {
 } from "@/app/natal/utils";
 import { ReportSection } from "./ReportSection";
 import { Points } from "./Points";
+import { Chart } from "../components/Chart";
+import { ModalChart } from "@/app/components/ModalChart";
 
 export function MoneyReport({ chart }: { chart: NatalChart }) {
   const router = useRouter();
@@ -101,7 +103,8 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
               Солнце в {solarSignPrepositional}
             </Typography>
             <Typography>Асцендент в {ascendantPrepositional}</Typography>
-            <Typography>Луна в {moonPrepositional}</Typography>
+            <Typography sx={{ mb: 1 }}>Луна в {moonPrepositional}</Typography>
+            <ModalChart planets={chart.planets} houses={chart.houses} />
           </Box>
         </Box>
       </Box>
@@ -155,17 +158,18 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
         </Stack>
       </ReportSection>
 
-      <ReportSection title="Понравилась информация?">
+      <ReportSection title="">
         <Stack spacing={3}>
           <Typography>
             Закажи более подробную информацию с учетом аспектов и положения
             других планет и домов в твоей натальной карте{" "}
             <span style={{ fontStyle: "italic" }}>(в разработке)</span>
           </Typography>
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+          <Box>
             <Button variant="contained">Заказать за 300 крон</Button>
-            <Typography>или</Typography>
-            <Button variant="contained">Записывайся на консультацию</Button>
+          </Box>
+          <Box>
+            <Button variant="outlined">Записывайся на консультацию</Button>
           </Box>
         </Stack>
       </ReportSection>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { isNatalChart, type NatalChart } from "./types";
+import { isNatalChart, type NatalChart } from "../types";
 import { useRouter } from "next/navigation";
 import { MoneyReport } from "@/app/natal/MoneyReport";
 import { NATAL_STORAGE_KEY } from "@/app/natal/constants";

@@ -7,7 +7,7 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#B18447",
+      main: "#d6a361",
       contrastText: "#FFFFFF",
     },
     background: {
@@ -49,6 +49,9 @@ const theme = createTheme({
           borderRadius: 4,
           textTransform: "none",
           fontSize: "1rem",
+        },
+        contained: {
+          color: "#000",
         },
       },
     },

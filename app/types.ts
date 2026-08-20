@@ -18,6 +18,12 @@ export interface NatalHouse {
   degree: number;
 }
 
+export type NatalChartProps = {
+  planets: NatalBody[];
+  houses: NatalHouse[];
+  size?: number;
+};
+
 export interface NatalAspect {
   aspecting_planet: string;
   aspected_planet: string;
@@ -140,5 +146,7 @@ function isNumber(value: unknown): value is number {
 }
 
 function isRetrogradeValue(value: unknown): value is RetrogradeValue {
-  return value === true || value === false || value === "true" || value === "false";
+  return (
+    value === true || value === false || value === "true" || value === "false"
+  );
 }

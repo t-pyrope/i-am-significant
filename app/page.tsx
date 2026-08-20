@@ -44,15 +44,12 @@ export default function Home() {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
-    const savedNatalChart = localStorage.getItem("natalChart");
-
-    if (!savedNatalChart) {
-      return;
-    }
-
     try {
-      JSON.parse(savedNatalChart);
-      router.push("/natal");
+      const savedNatalChart = localStorage.getItem("natalChart");
+      if (savedNatalChart) {
+        JSON.parse(savedNatalChart);
+        router.push("/natal");
+      }
     } catch {
       localStorage.removeItem("natalChart");
     } finally {
@@ -238,8 +235,8 @@ export default function Home() {
                 lineHeight: 1.3,
               }}
             >
-              Узнай, через что приходят деньги и какие способности помогут
-              увеличить доход — индивидуально по твоей натальной карте
+              Узнай, через что к тебе приходят деньги и какие способности
+              помогут увеличить доход — индивидуально по твоей натальной карте
             </Typography>
           </Box>
 
