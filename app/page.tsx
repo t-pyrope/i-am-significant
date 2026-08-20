@@ -53,7 +53,7 @@ export default function Home() {
     } catch {
       localStorage.removeItem("natalChart");
     } finally {
-      setIsPageLoading(false);
+      setTimeout(setIsPageLoading, 500, false);
     }
   }, [router]);
 
