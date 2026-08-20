@@ -1,3 +1,5 @@
+export const NATAL_STORAGE_KEY = "natalChart";
+
 export const RULERS = [
   {
     sign_id: 1,

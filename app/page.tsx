@@ -19,6 +19,7 @@ import { ruRU } from "@mui/x-date-pickers/locales";
 import { useRouter } from "next/navigation";
 import type { Dayjs } from "dayjs";
 import "dayjs/locale/ru";
+import { PageLoader } from "@/app/components/PageLoader";
 
 type CitySuggestion = {
   formatted: string;
@@ -40,6 +41,7 @@ export default function Home() {
   const [citySearchError, setCitySearchError] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
     const savedNatalChart = localStorage.getItem("natalChart");
@@ -53,6 +55,8 @@ export default function Home() {
       router.push("/natal");
     } catch {
       localStorage.removeItem("natalChart");
+    } finally {
+      setIsPageLoading(false);
     }
   }, [router]);
 
@@ -148,6 +152,10 @@ export default function Home() {
     }
   }
 
+  if (isPageLoading) {
+    return <PageLoader />;
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box
@@ -179,6 +187,7 @@ export default function Home() {
             />
             <Typography
               component="h1"
+              variant="h1"
               sx={{
                 color: "#CEB687",
                 fontWeight: 400,
