@@ -169,7 +169,13 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
             <Button variant="contained">Заказать за 300 крон</Button>
           </Box>
           <Box>
-            <Button variant="outlined">Записывайся на консультацию</Button>
+            <Button
+              variant="outlined"
+              target="_blank"
+              href="https://www.instagram.com/natalia_fedotova_/"
+            >
+              Записывайся на консультацию
+            </Button>
           </Box>
         </Stack>
       </ReportSection>
