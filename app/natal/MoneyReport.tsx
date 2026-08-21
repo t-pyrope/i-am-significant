@@ -13,7 +13,6 @@ import {
 } from "@/app/natal/utils";
 import { ReportSection } from "./ReportSection";
 import { Points } from "./Points";
-import { Chart } from "../components/Chart";
 import { ChartModal } from "@/app/components/ChartModal";
 import { OrderModal } from "@/app/components/OrderModal";
 
@@ -150,12 +149,6 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
               </Typography>
             </Box>
           ))}
-
-          <Box>
-            <Button onClick={startAgain} variant="contained" color="error">
-              Начать сначала
-            </Button>
-          </Box>
         </Stack>
       </ReportSection>
 

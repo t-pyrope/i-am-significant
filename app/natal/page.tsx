@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { MoneyReport } from "@/app/natal/MoneyReport";
 import { NATAL_STORAGE_KEY } from "@/app/natal/constants";
 import { PageLoader } from "@/app/components/PageLoader";
+import { Header } from "@/app/components/Header";
 
 export default function NatalPage() {
   const [chart, setChart] = useState<NatalChart | null>(null);
@@ -44,14 +45,20 @@ export default function NatalPage() {
       component="main"
       sx={{
         minHeight: "100svh",
-        maxWidth: 800,
-        mx: "auto",
-        px: { xs: 3, sm: 4 },
-        py: { xs: 4, sm: 6 },
       }}
     >
-      {!hasCheckedStorage ? <PageLoader /> : null}
-      {hasCheckedStorage && chart ? <MoneyReport chart={chart} /> : null}
+      <Header />
+      <Box
+        sx={{
+          maxWidth: 800,
+          mx: "auto",
+          px: { xs: 3, sm: 4 },
+          py: { xs: 4, sm: 6 },
+        }}
+      >
+        {!hasCheckedStorage ? <PageLoader /> : null}
+        {hasCheckedStorage && chart ? <MoneyReport chart={chart} /> : null}
+      </Box>
     </Box>
   );
 }

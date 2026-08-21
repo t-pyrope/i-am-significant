@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import type { Dayjs } from "dayjs";
 import "dayjs/locale/ru";
 import { PageLoader } from "@/app/components/PageLoader";
+import { Logo } from "@/app/components/Logo";
 
 type CitySuggestion = {
   formatted: string;
@@ -182,51 +183,7 @@ export default function Home() {
               src="/avatar.jpg"
               sx={{ width: 104, height: 104, mx: "auto", mb: 2 }}
             />
-            <Typography
-              component="h1"
-              variant="h1"
-              sx={{
-                color: "#CEB687",
-                fontWeight: 400,
-                lineHeight: 1,
-              }}
-            >
-              <Box
-                component="span"
-                sx={{
-                  display: "block",
-                  fontFamily: "var(--font-playfair-display), serif",
-                  fontSize: { xs: "4.6rem" },
-                  letterSpacing: "0.08em",
-                  lineHeight: 1,
-                }}
-              >
-                NATALIA
-              </Box>
-              <Box
-                component="span"
-                sx={{
-                  display: "block",
-                  fontFamily: "var(--font-playfair-display), serif",
-                  fontSize: { xs: "2rem" },
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.1,
-                  textTransform: "uppercase",
-                }}
-              >
-                astro psychology
-              </Box>
-              <Box
-                component="span"
-                sx={{
-                  display: "block",
-                  fontFamily: "var(--font-pinyon-script), cursive",
-                  fontSize: { xs: "2rem" },
-                }}
-              >
-                Prague
-              </Box>
-            </Typography>
+            <Logo />
             <Typography
               component="p"
               sx={{
