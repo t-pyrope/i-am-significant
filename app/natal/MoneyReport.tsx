@@ -135,7 +135,7 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
           {rulerPlanetsWithWays.map((element) => (
             <Box key={`${element.name}-${element.house}`}>
               <Typography component="h3" variant="h5" sx={{ mb: 1 }}>
-                Управитель 2 дома {element.name} стоит в {element.title}
+                Управитель 2 дома {element.name} стоит {element.title}
               </Typography>
               <Typography component="p">
                 {element.way ? `${element.way}. ` : ""}Фразы:
@@ -161,8 +161,8 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
       <ReportSection title="">
         <Stack spacing={3}>
           <Typography>
-            Закажи более подробную информацию с учетом аспектов и положения
-            других планет и домов в твоей натальной карте{" "}
+            Закажи более подробную информацию с учетом положения планет и их
+            аспектов в твоей натальной карте{" "}
             <span style={{ fontStyle: "italic" }}>(в разработке)</span>
           </Typography>
           <Box>

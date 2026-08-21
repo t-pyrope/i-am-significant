@@ -1,7 +1,8 @@
 import { NatalChartProps } from "@/app/types";
 import { Chart } from "@/app/components/Chart";
-import { Box, Button, Modal } from "@mui/material";
+import { Box, Button, IconButton, Modal } from "@mui/material";
 import { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 
 const style = {
   position: "absolute",
@@ -29,9 +30,9 @@ export function ModalChart(props: NatalChartProps) {
 
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box sx={style}>
-          <Button variant="outlined" onClick={() => setOpen(false)}>
-            Закрыть
-          </Button>
+          <IconButton aria-label="Закрыть" onClick={() => setOpen(false)}>
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
           <Chart {...props} />
         </Box>
       </Modal>
