@@ -38,12 +38,11 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
   const cx = 50;
   const cy = 50;
 
-  // ASC = начало 1 дома.
-  // В SVG угол 0° — справа, поэтому ASC специально
-  // размещаем слева (180°).
   const asc = houses.find((h) => h.house === 1)?.degree ?? 0;
 
-  const toSvgAngle = (degree: number) => degree - asc + 180;
+  // ASC находится слева.
+  // Увеличение астрологического градуса идёт против часовой стрелки.
+  const toSvgAngle = (degree: number) => asc - degree + 180;
 
   const point = (degree: number, radius: number) => {
     const angle = (toSvgAngle(degree) * Math.PI) / 180;
@@ -68,17 +67,8 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
         height="100%"
         style={{ overflow: "visible" }}
       >
-        {/* Фон */}
-        <circle
-          cx={cx}
-          cy={cy}
-          r="48"
-          // fill="#fffdf7"
-          stroke="#fff"
-          strokeWidth="0.35"
-        />
+        <circle cx={cx} cy={cy} r="48" stroke="#fff" strokeWidth="0.35" />
 
-        {/* Кольцо знаков */}
         <circle
           cx={cx}
           cy={cy}
@@ -88,19 +78,12 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
           strokeWidth="0.3"
         />
 
-        {/* Центральный круг */}
-        <circle
-          cx={cx}
-          cy={cy}
-          r="7"
-          // fill="#fffdf7"
-          stroke="#fff"
-          strokeWidth="0.25"
-        />
+        <circle cx={cx} cy={cy} r="7" stroke="#fff" strokeWidth="0.25" />
 
-        {/* 12 секторов знаков */}
+        {/* Знаки зодиака */}
         {Array.from({ length: 12 }).map((_, i) => {
           const degree = i * 30;
+
           const a = point(degree, 39);
           const b = point(degree, 48);
 
@@ -119,8 +102,8 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
 
               <image
                 href={`/zodiac-small/${ZODIAC[i]}.png`}
-                x={label.x - 2.5}
-                y={label.y - 2.5}
+                x={label.x - 2}
+                y={label.y - 2}
                 width="4"
                 height="4"
               />
@@ -146,17 +129,19 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
           );
         })}
 
-        {/* Номера домов — посередине между cusp */}
+        {/* Номера домов */}
         {houses.map((house, index) => {
           const next = houses[(index + 1) % houses.length];
 
           const start = house.degree;
           let end = next.degree;
 
-          if (end <= start) end += 360;
+          // Последний дом переходит через 360° → 0°
+          if (end <= start) {
+            end += 360;
+          }
 
           const middle = ((start + end) / 2) % 360;
-
           const pos = point(middle, 14);
 
           return (
