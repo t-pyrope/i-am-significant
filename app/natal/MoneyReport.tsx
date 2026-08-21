@@ -14,7 +14,8 @@ import {
 import { ReportSection } from "./ReportSection";
 import { Points } from "./Points";
 import { Chart } from "../components/Chart";
-import { ModalChart } from "@/app/components/ModalChart";
+import { ChartModal } from "@/app/components/ChartModal";
+import { OrderModal } from "@/app/components/OrderModal";
 
 export function MoneyReport({ chart }: { chart: NatalChart }) {
   const router = useRouter();
@@ -104,7 +105,7 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
             </Typography>
             <Typography>Асцендент в {ascendantPrepositional}</Typography>
             <Typography sx={{ mb: 1 }}>Луна в {moonPrepositional}</Typography>
-            <ModalChart planets={chart.planets} houses={chart.houses} />
+            <ChartModal planets={chart.planets} houses={chart.houses} />
           </Box>
         </Box>
       </Box>
@@ -165,9 +166,7 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
             аспектов в твоей натальной карте{" "}
             <span style={{ fontStyle: "italic" }}>(в разработке)</span>
           </Typography>
-          <Box>
-            <Button variant="contained">Заказать за 300 крон</Button>
-          </Box>
+          <OrderModal />
           <Box>
             <Button
               variant="outlined"
