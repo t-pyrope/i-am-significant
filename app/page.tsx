@@ -180,7 +180,7 @@ export default function Home() {
           <Box sx={{ textAlign: "center", mb: 1 }}>
             <Avatar
               alt="Natalia"
-              src="/avatar.jpg"
+              src="/avatar.png"
               sx={{ width: 104, height: 104, mx: "auto", mb: 2 }}
             />
             <Logo />
