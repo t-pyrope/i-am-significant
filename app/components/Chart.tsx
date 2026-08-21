@@ -40,8 +40,7 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
 
   const asc = houses.find((h) => h.house === 1)?.degree ?? 0;
 
-  // ASC находится слева.
-  // Увеличение астрологического градуса идёт против часовой стрелки.
+  // ASC слева, движение градусов — против часовой стрелки
   const toSvgAngle = (degree: number) => asc - degree + 180;
 
   const point = (degree: number, radius: number) => {
@@ -52,6 +51,106 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
       y: cy + radius * Math.sin(angle),
     };
   };
+
+  // Расстояние между двумя точками на круге
+  const angularDistance = (a: number, b: number) => {
+    const diff = Math.abs(a - b) % 360;
+
+    return Math.min(diff, 360 - diff);
+  };
+
+  // Определяем радиус каждой планеты,
+  // чтобы близкие планеты не накладывались
+  const getPlanetPositions = () => {
+    const sorted = planets
+      .map((planet, originalIndex) => ({
+        planet,
+        originalIndex,
+      }))
+      .sort((a, b) => a.planet.full_degree - b.planet.full_degree);
+
+    const positions = new Map<
+      number,
+      {
+        degree: number;
+        radius: number;
+      }
+    >();
+
+    const MIN_DISTANCE = 7;
+    const BASE_RADIUS = 36;
+    const RADIUS_STEP = 4;
+
+    const groups: (typeof sorted)[] = [];
+    let currentGroup: typeof sorted = [];
+
+    sorted.forEach((item, index) => {
+      const prev = sorted[index - 1];
+
+      if (
+        prev &&
+        angularDistance(item.planet.full_degree, prev.planet.full_degree) <
+          MIN_DISTANCE
+      ) {
+        currentGroup.push(item);
+      } else {
+        if (currentGroup.length > 0) {
+          groups.push(currentGroup);
+        }
+
+        currentGroup = [item];
+      }
+    });
+
+    if (currentGroup.length > 0) {
+      groups.push(currentGroup);
+    }
+
+    // Склеиваем первую и последнюю группу,
+    // если они близки через 0° / 360°
+    if (groups.length > 1) {
+      const firstGroup = groups[0];
+      const lastGroup = groups[groups.length - 1];
+
+      const first = firstGroup[0].planet.full_degree;
+
+      const last = lastGroup[lastGroup.length - 1].planet.full_degree;
+
+      if (angularDistance(first, last) < MIN_DISTANCE) {
+        const merged = [...lastGroup, ...firstGroup];
+
+        groups.shift();
+        groups.pop();
+        groups.unshift(merged);
+      }
+    }
+
+    groups.forEach((group) => {
+      // Если планета одна — оставляем на базовом радиусе
+      if (group.length === 1) {
+        const item = group[0];
+
+        positions.set(item.originalIndex, {
+          degree: item.planet.full_degree,
+          radius: BASE_RADIUS,
+        });
+
+        return;
+      }
+
+      // Группу близких планет разносим по радиусу
+      group.forEach((item, index) => {
+        positions.set(item.originalIndex, {
+          degree: item.planet.full_degree,
+          radius: BASE_RADIUS - index * RADIUS_STEP,
+        });
+      });
+    });
+
+    return positions;
+  };
+
+  const planetPositions = getPlanetPositions();
 
   return (
     <div
@@ -67,8 +166,17 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
         height="100%"
         style={{ overflow: "visible" }}
       >
-        <circle cx={cx} cy={cy} r="48" stroke="#fff" strokeWidth="0.35" />
+        {/* Внешний круг */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r="48"
+          fill="transparent"
+          stroke="#fff"
+          strokeWidth="0.35"
+        />
 
+        {/* Внутренняя граница кольца знаков */}
         <circle
           cx={cx}
           cy={cy}
@@ -78,9 +186,17 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
           strokeWidth="0.3"
         />
 
-        <circle cx={cx} cy={cy} r="7" stroke="#fff" strokeWidth="0.25" />
+        {/* Центральный круг */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r="7"
+          fill="transparent"
+          stroke="#fff"
+          strokeWidth="0.25"
+        />
 
-        {/* Знаки зодиака */}
+        {/* 12 знаков зодиака */}
         {Array.from({ length: 12 }).map((_, i) => {
           const degree = i * 30;
 
@@ -90,7 +206,7 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
           const label = point(degree + 15, 44);
 
           return (
-            <g key={i}>
+            <g key={ZODIAC[i]}>
               <line
                 x1={a.x}
                 y1={a.y}
@@ -114,11 +230,12 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
         {/* Границы домов */}
         {houses.map((house) => {
           const inner = point(house.degree, 7);
+
           const outer = point(house.degree, 39);
 
           return (
             <line
-              key={`line-${house.house}`}
+              key={`house-line-${house.house}`}
               x1={inner.x}
               y1={inner.y}
               x2={outer.x}
@@ -134,19 +251,20 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
           const next = houses[(index + 1) % houses.length];
 
           const start = house.degree;
+
           let end = next.degree;
 
-          // Последний дом переходит через 360° → 0°
           if (end <= start) {
             end += 360;
           }
 
           const middle = ((start + end) / 2) % 360;
+
           const pos = point(middle, 14);
 
           return (
             <text
-              key={`number-${house.house}`}
+              key={`house-number-${house.house}`}
               x={pos.x}
               y={pos.y}
               textAnchor="middle"
@@ -161,7 +279,11 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
 
         {/* Планеты */}
         {planets.map((planet, index) => {
-          const pos = point(planet.full_degree, 33);
+          const position = planetPositions.get(index);
+
+          if (!position) return null;
+
+          const pos = point(position.degree, position.radius);
 
           return (
             <text
