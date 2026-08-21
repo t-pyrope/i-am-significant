@@ -54,6 +54,22 @@ const theme = createTheme({
           color: "#000",
         },
       },
+      variants: [
+        {
+          props: { variant: "outlined", color: "primary" },
+          style: {
+            color: "#F4D8AF",
+            // borderColor: "#E9C995",
+            backgroundColor: "rgba(244, 216, 175, 0.12)",
+            "@media (hover: hover)": {
+              "&:hover": {
+                // borderColor: "#F4D8AF",
+                backgroundColor: "rgba(244, 216, 175, 0.16)",
+              },
+            },
+          },
+        },
+      ],
     },
     MuiInputLabel: {
       styleOverrides: {
