@@ -101,6 +101,27 @@ const theme = createTheme({
         },
       },
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "rgba(255, 255, 255, 0.55)",
+          },
+
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#d6a361",
+          },
+        },
+      },
+    },
+    MuiCssBaseline: {
+      styleOverrides: {
+        ".MuiPickersOutlinedInput-root:hover fieldset.MuiPickersOutlinedInput-notchedOutline":
+          {
+            borderColor: "rgba(255, 255, 255, 0.55)",
+          },
+      },
+    },
   },
 });
 

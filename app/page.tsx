@@ -165,7 +165,11 @@ export default function Home() {
           justifyContent: "center",
           px: 3,
           py: 6,
-          bgcolor: "var(--background)",
+
+          backgroundImage: "url('/bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <Stack
@@ -174,7 +178,32 @@ export default function Home() {
           spacing={3}
           sx={{
             width: "100%",
-            maxWidth: 460,
+            maxWidth: 500,
+            background:
+              "linear-gradient(181deg, rgba(255, 255, 255, 0.04) 1.15%, rgba(255, 255, 255, 0.00) 98.91%)",
+            px: { xs: 1, md: 4 },
+            py: { xs: 2, md: 6 },
+            backdropFilter: "blur(10px)",
+            borderRadius: 5,
+            position: "relative",
+            //         "&::before": {
+            //           position: "absolute",
+            //           content: `""`,
+            //           inset: 0,
+            //           borderRadius: 5,
+            //           padding: "1px",
+            //           background: `linear-gradient(
+            //         174deg,
+            //         rgb(255, 255, 255, 0.05),
+            //         rgba(255,255,255,0) 54%,
+            //         rgba(252, 255, 255, 0.04)
+            // )`,
+            //           WebkitMask: `linear-gradient(#000 0 0) content-box,
+            //         linear-gradient(#000 0 0)`,
+            //           maskComposite: "xor",
+            //           mixBlendMode: "overlay",
+            //           pointerEvents: "none",
+            //         },
           }}
         >
           <Box sx={{ textAlign: "center", mb: 1 }}>
