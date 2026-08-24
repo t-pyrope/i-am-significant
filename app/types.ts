@@ -150,3 +150,12 @@ function isRetrogradeValue(value: unknown): value is RetrogradeValue {
     value === true || value === false || value === "true" || value === "false"
   );
 }
+
+export type CitySuggestion = {
+  formatted: string;
+  latitude: number;
+  longitude: number;
+  timezone?: {
+    name: string;
+  };
+};

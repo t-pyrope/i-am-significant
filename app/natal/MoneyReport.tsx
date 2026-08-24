@@ -14,7 +14,7 @@ import {
 import { ReportSection } from "./ReportSection";
 import { Points } from "./Points";
 import { ChartModal } from "@/app/components/ChartModal";
-import { OrderModal } from "@/app/components/OrderModal";
+// import { OrderModal } from "@/app/components/OrderModal";
 
 export function MoneyReport({ chart }: { chart: NatalChart }) {
   const router = useRouter();
@@ -152,25 +152,25 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
         </Stack>
       </ReportSection>
 
-      <ReportSection title="">
-        <Stack spacing={3}>
-          <Typography>
-            Закажи более подробную информацию с учетом положения планет и их
-            аспектов в твоей натальной карте{" "}
-            <span style={{ fontStyle: "italic" }}>(в разработке)</span>
-          </Typography>
-          <OrderModal />
-          <Box>
-            <Button
-              variant="outlined"
-              target="_blank"
-              href="https://www.instagram.com/natalia_fedotova_/"
-            >
-              Записывайся на консультацию
-            </Button>
-          </Box>
-        </Stack>
-      </ReportSection>
+      {/*<ReportSection title="">*/}
+      {/*  <Stack spacing={3}>*/}
+      {/*    <Typography>*/}
+      {/*      Закажи более подробную информацию с учетом положения планет и их*/}
+      {/*      аспектов в твоей натальной карте{" "}*/}
+      {/*      <span style={{ fontStyle: "italic" }}>(в разработке)</span>*/}
+      {/*    </Typography>*/}
+      {/*    <OrderModal />*/}
+      {/*    <Box>*/}
+      {/*      <Button*/}
+      {/*        variant="outlined"*/}
+      {/*        target="_blank"*/}
+      {/*        href="https://www.instagram.com/natalia_fedotova_/"*/}
+      {/*      >*/}
+      {/*        Записывайся на консультацию*/}
+      {/*      </Button>*/}
+      {/*    </Box>*/}
+      {/*  </Stack>*/}
+      {/*</ReportSection>*/}
     </Stack>
   );
 }

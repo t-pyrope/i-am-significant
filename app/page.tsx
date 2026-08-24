@@ -7,6 +7,8 @@ import {
   Box,
   Button,
   CircularProgress,
+  Divider,
+  IconButton,
   Stack,
   TextField,
   Typography,
@@ -21,15 +23,14 @@ import type { Dayjs } from "dayjs";
 import "dayjs/locale/ru";
 import { PageLoader } from "@/app/components/PageLoader";
 import { Logo } from "@/app/components/Logo";
-
-type CitySuggestion = {
-  formatted: string;
-  latitude: number;
-  longitude: number;
-  timezone?: {
-    name: string;
-  };
-};
+import InstagramIcon from "@mui/icons-material/Instagram";
+import TelegramIcon from "@mui/icons-material/Telegram";
+import { CitySuggestion } from "@/app/types";
+import {
+  getErrorMessage,
+  isCitySuggestionsResponse,
+  postJson,
+} from "@/app/utils";
 
 export default function Home() {
   const router = useRouter();
@@ -181,7 +182,7 @@ export default function Home() {
             maxWidth: 500,
             background:
               "linear-gradient(181deg, rgba(255, 255, 255, 0.04) 1.15%, rgba(255, 255, 255, 0.00) 98.91%)",
-            px: { xs: 1, md: 4 },
+            px: { xs: 3, md: 4 },
             py: { xs: 2, md: 6 },
             backdropFilter: "blur(10px)",
             borderRadius: 5,
@@ -210,19 +211,19 @@ export default function Home() {
             <Avatar
               alt="Natalia"
               src="/avatar.png"
-              sx={{ width: 104, height: 104, mx: "auto", mb: 2 }}
+              sx={{ width: 104, height: 104, mx: "auto", mb: 2.5 }}
             />
-            <Logo />
+            <Logo size={0.7} />
             <Typography
               component="p"
               sx={{
-                mt: 1.5,
+                mt: 2,
                 fontSize: "1rem",
-                lineHeight: 1.3,
+                lineHeight: 1.5,
               }}
             >
               Узнай, через что к тебе приходят деньги и какие способности
-              помогут увеличить доход — индивидуально по твоей натальной карте
+              помогут увеличить доход
             </Typography>
           </Box>
 
@@ -332,7 +333,7 @@ export default function Home() {
               py: 1.35,
             }}
           >
-            {isSubmitting ? "Отправляем..." : "Узнай свой натал"}
+            {isSubmitting ? "Отправляем..." : "Рассчитать"}
           </Button>
 
           {error ? (
@@ -340,61 +341,34 @@ export default function Home() {
               {error}
             </Typography>
           ) : null}
+
+          <Divider />
+
+          <Box sx={{ display: "flex", gap: 0.3, justifyContent: "center" }}>
+            <IconButton
+              component="a"
+              href="https://www.instagram.com/natalia_fedotova_/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              color="primary"
+            >
+              <InstagramIcon />
+            </IconButton>
+
+            <IconButton
+              component="a"
+              href="https://t.me/Natalia_Fedotovaa"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Telegram"
+              color="primary"
+            >
+              <TelegramIcon />
+            </IconButton>
+          </Box>
         </Stack>
       </Box>
     </LocalizationProvider>
-  );
-}
-
-async function postJson(url: string, body: unknown) {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  const data = await response.json().catch(() => null);
-
-  if (!response.ok) {
-    throw new Error(getErrorMessage(data));
-  }
-
-  return data;
-}
-
-function getErrorMessage(data: unknown) {
-  if (
-    typeof data === "object" &&
-    data !== null &&
-    "error" in data &&
-    typeof data.error === "string"
-  ) {
-    return data.error;
-  }
-
-  return "Не удалось отправить данные.";
-}
-
-function isCitySuggestionsResponse(
-  data: unknown,
-): data is { results: CitySuggestion[] } {
-  return (
-    typeof data === "object" &&
-    data !== null &&
-    "results" in data &&
-    Array.isArray(data.results) &&
-    data.results.every(
-      (result) =>
-        typeof result === "object" &&
-        result !== null &&
-        "formatted" in result &&
-        typeof result.formatted === "string" &&
-        "latitude" in result &&
-        typeof result.latitude === "number" &&
-        "longitude" in result &&
-        typeof result.longitude === "number",
-    )
   );
 }
