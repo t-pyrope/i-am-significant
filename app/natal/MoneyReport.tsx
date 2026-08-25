@@ -1,19 +1,14 @@
 import type { NatalChart } from "@/app/types";
 import { useRouter } from "next/navigation";
-import { NATAL_STORAGE_KEY, RULERS } from "@/app/natal/constants";
-import realisationWays from "@/app/docs/01-way-of-realisation.json";
-import moneyWays from "@/app/docs/02-how-make-money.json";
-import rulerWays from "@/app/docs/03-ruler.json";
+import { NATAL_STORAGE_KEY } from "@/app/natal/constants";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import {
   getAscendantPlanetName,
-  getNominativeCase,
   getPrepositionalCase,
   getZodiacSymbolImageSrc,
 } from "@/app/natal/utils";
-import { ReportSection } from "./ReportSection";
-import { Points } from "./Points";
 import { ChartModal } from "@/app/components/ChartModal";
+import { NatalChartReport } from "./NatalChartReport";
 // import { OrderModal } from "@/app/components/OrderModal";
 
 export function MoneyReport({ chart }: { chart: NatalChart }) {
@@ -21,27 +16,6 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
 
   const solarSign = chart.planets.find((planet) => planet.name === "Солнце");
   const moonSign = chart.planets.find((planet) => planet.name === "Луна");
-  const solarSignRuler = RULERS.find(
-    (item) => item.sign_id === solarSign?.sign_id,
-  );
-  const realisationWaySign = realisationWays.find(
-    (way) => way.sign_id === solarSignRuler?.sign_id,
-  );
-  const secondHouse = chart.houses.find((house) => house.house === 2);
-  const moneyWaySign = moneyWays.find(
-    (way) => way.sign_id === secondHouse?.sign_id,
-  );
-  const ruler = RULERS.find((item) => item.sign_id === secondHouse?.sign_id);
-  const rulerPlanets = chart.planets.filter((planet) =>
-    ruler?.rulers.includes(planet.name as never),
-  );
-  const rulerPlanetsWithWays = rulerPlanets
-    .map((planet) => {
-      const rulerWay = rulerWays.find((way) => way.house === planet.house);
-
-      return rulerWay ? { ...planet, ...rulerWay } : null;
-    })
-    .filter((planet): planet is NonNullable<typeof planet> => planet !== null);
 
   const startAgain = () => {
     localStorage.removeItem(NATAL_STORAGE_KEY);
@@ -51,10 +25,8 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
   if (
     !solarSign ||
     !moonSign ||
-    !realisationWaySign ||
-    !secondHouse ||
-    !moneyWaySign ||
-    !ruler
+    !chart.houses.some((house) => house.house === 2) ||
+    !chart.houses.some((house) => house.house === 6)
   ) {
     return (
       <Stack spacing={2} sx={{ alignItems: "flex-start" }}>
@@ -74,8 +46,6 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
   const ascendantPrepositional = getPrepositionalCase(ascendantName);
   const moonPrepositional = getPrepositionalCase(moonSign.sign);
 
-  const solarNominative = getNominativeCase(solarSign.sign);
-
   return (
     <Stack spacing={5}>
       <Box>
@@ -94,9 +64,7 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
               component="h1"
               variant="h1"
               sx={{
-                fontFamily: "Georgia, 'Times New Roman', serif",
                 fontSize: { xs: "2.25rem", sm: "3rem" },
-                fontWeight: 400,
                 mb: 1,
               }}
             >
@@ -109,48 +77,7 @@ export function MoneyReport({ chart }: { chart: NatalChart }) {
         </Box>
       </Box>
 
-      <ReportSection title="Каким способом реализуется сфера денег?">
-        <Typography component="h3" variant="h5" sx={{ mb: 1 }}>
-          {solarNominative} — {realisationWaySign.title}
-        </Typography>
-        <Points points={realisationWaySign.realisation} />
-        <Typography component="p" sx={{ fontWeight: 700, fontStyle: "italic" }}>
-          Ключ: {realisationWaySign.key}
-        </Typography>
-      </ReportSection>
-
-      <ReportSection title="Как ты зарабатываешь?">
-        <Typography component="h3" variant="h5" sx={{ mb: 1 }}>
-          Твой 2 дом {moneyWaySign.title}. Это значит, что деньги приходят
-          через:
-        </Typography>
-        <Points points={moneyWaySign.points} />
-        <Typography component="p" sx={{ fontWeight: 700, fontStyle: "italic" }}>
-          Фраза: &quot;{moneyWaySign.key}&quot;
-        </Typography>
-      </ReportSection>
-
-      <ReportSection title="Деньги через управителя 2 дома">
-        <Stack spacing={3}>
-          {rulerPlanetsWithWays.map((element) => (
-            <Box key={`${element.name}-${element.house}`}>
-              <Typography component="h3" variant="h5" sx={{ mb: 1 }}>
-                Управитель 2 дома {element.name} стоит {element.title}
-              </Typography>
-              <Typography component="p">
-                {element.way ? `${element.way}. ` : ""}Фразы:
-              </Typography>
-              <Points points={element.points} />
-              <Typography
-                component="p"
-                sx={{ fontWeight: 700, fontStyle: "italic" }}
-              >
-                Пример: {element.example}
-              </Typography>
-            </Box>
-          ))}
-        </Stack>
-      </ReportSection>
+      <NatalChartReport chart={chart} />
 
       {/*<ReportSection title="">*/}
       {/*  <Stack spacing={3}>*/}

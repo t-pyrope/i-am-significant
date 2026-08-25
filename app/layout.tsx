@@ -42,7 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="ru"
       className={`${playfairDisplay.variable} ${pinyonScript.variable}`}
     >
-      <body>
+      <body suppressHydrationWarning>
         <AppThemeProvider>{children}</AppThemeProvider>
       </body>
     </html>

@@ -22,18 +22,18 @@ const theme = createTheme({
   typography: {
     h1: {
       color: "#CEB687",
+      fontFamily: "Georgia, 'Times New Roman', serif",
+      fontWeight: 400,
     },
     h2: {
       color: "#CEB687",
+      fontSize: "2rem",
+      fontFamily: "Georgia, 'Times New Roman', serif",
     },
   },
   components: {
     MuiTypography: {
-      styleOverrides: {
-        h1: {
-          color: "#CEB687",
-        },
-      },
+      styleOverrides: {},
     },
     MuiButtonBase: {
       defaultProps: {

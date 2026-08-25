@@ -9,7 +9,7 @@ export function ReportSection({
 }) {
   return (
     <Box component="section">
-      <Typography component="h2" variant="h4" sx={{ mb: 2 }}>
+      <Typography component="h2" variant="h2" sx={{ mb: 2 }}>
         {title}
       </Typography>
       {children}
