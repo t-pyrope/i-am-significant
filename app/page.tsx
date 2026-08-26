@@ -22,7 +22,7 @@ import type { Dayjs } from "dayjs";
 import "dayjs/locale/ru";
 import { PageLoader } from "@/app/components/PageLoader";
 import { Logo } from "@/app/components/Logo";
-import { isNatalChart, type CitySuggestion } from "@/app/types";
+import { CitySuggestion } from "@/app/types";
 import {
   getErrorMessage,
   isCitySuggestionsResponse,
@@ -42,38 +42,20 @@ export default function Home() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [hasSavedChart, setHasSavedChart] = useState(false);
 
   useEffect(() => {
-    const frameId = window.requestAnimationFrame(() => {
-      try {
-        const savedNatalChart = localStorage.getItem("natalChart");
-
-        if (savedNatalChart) {
-          const parsed: unknown = JSON.parse(savedNatalChart);
-          setHasSavedChart(isNatalChart(parsed));
-        }
-      } catch {
-        localStorage.removeItem("natalChart");
-      } finally {
-        setIsPageLoading(false);
+    try {
+      const savedNatalChart = localStorage.getItem("natalChart");
+      if (savedNatalChart) {
+        JSON.parse(savedNatalChart);
+        router.push("/natal");
       }
-    });
-
-    return () => window.cancelAnimationFrame(frameId);
-  }, []);
-
-  useEffect(() => {
-    if (!hasSavedChart) {
-      return;
+    } catch {
+      localStorage.removeItem("natalChart");
+    } finally {
+      setTimeout(setIsPageLoading, 500, false);
     }
-
-    const frameId = window.requestAnimationFrame(() => {
-      window.location.replace("/natal");
-    });
-
-    return () => window.cancelAnimationFrame(frameId);
-  }, [hasSavedChart]);
+  }, [router]);
 
   useEffect(() => {
     const city = birthCity.trim();
