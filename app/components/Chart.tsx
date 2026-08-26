@@ -78,8 +78,8 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
     >();
 
     const MIN_DISTANCE = 7;
-    const BASE_RADIUS = 36;
-    const RADIUS_STEP = 4;
+    const BASE_RADIUS = 33;
+    const RADIUS_STEP = 6;
 
     const groups: (typeof sorted)[] = [];
     let currentGroup: typeof sorted = [];
@@ -152,6 +152,9 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
 
   const planetPositions = getPlanetPositions();
 
+  const bgScale = 2.4;
+  const bgSize = 78 * bgScale;
+
   return (
     <div
       style={{
@@ -174,6 +177,22 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
           fill="transparent"
           stroke="#fff"
           strokeWidth="0.35"
+        />
+
+        <defs>
+          <clipPath id="chart-bg-clip">
+            <circle cx={cx} cy={cy} r="39" />
+          </clipPath>
+        </defs>
+
+        <image
+          href="/bg.png"
+          x={(100 - bgSize) / 2}
+          y={(100 - bgSize) / 2}
+          width={bgSize}
+          height={bgSize}
+          preserveAspectRatio="xMidYMid slice"
+          clipPath="url(#chart-bg-clip)"
         />
 
         {/* Внутренняя граница кольца знаков */}
@@ -260,7 +279,7 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
 
           const middle = ((start + end) / 2) % 360;
 
-          const pos = point(middle, 14);
+          const pos = point(middle, 10);
 
           return (
             <text
@@ -269,10 +288,11 @@ export function Chart({ planets, houses, size = 600 }: NatalChartProps) {
               y={pos.y}
               textAnchor="middle"
               dominantBaseline="middle"
-              fontSize="3.4"
+              fontSize="2"
               fill="#fff"
+              fontStyle="italic"
             >
-              {house.house}
+              {/*{house.house}*/}
             </text>
           );
         })}
