@@ -8,7 +8,6 @@ import {
   Button,
   CircularProgress,
   Divider,
-  IconButton,
   Stack,
   TextField,
   Typography,
@@ -23,14 +22,13 @@ import type { Dayjs } from "dayjs";
 import "dayjs/locale/ru";
 import { PageLoader } from "@/app/components/PageLoader";
 import { Logo } from "@/app/components/Logo";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import TelegramIcon from "@mui/icons-material/Telegram";
-import { CitySuggestion } from "@/app/types";
+import { isNatalChart, type CitySuggestion } from "@/app/types";
 import {
   getErrorMessage,
   isCitySuggestionsResponse,
   postJson,
 } from "@/app/utils";
+import { SocialLinks } from "@/app/components/SocialLinks";
 
 export default function Home() {
   const router = useRouter();
@@ -44,20 +42,38 @@ export default function Home() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [hasSavedChart, setHasSavedChart] = useState(false);
 
   useEffect(() => {
-    try {
-      const savedNatalChart = localStorage.getItem("natalChart");
-      if (savedNatalChart) {
-        JSON.parse(savedNatalChart);
-        router.push("/natal");
+    const frameId = window.requestAnimationFrame(() => {
+      try {
+        const savedNatalChart = localStorage.getItem("natalChart");
+
+        if (savedNatalChart) {
+          const parsed: unknown = JSON.parse(savedNatalChart);
+          setHasSavedChart(isNatalChart(parsed));
+        }
+      } catch {
+        localStorage.removeItem("natalChart");
+      } finally {
+        setIsPageLoading(false);
       }
-    } catch {
-      localStorage.removeItem("natalChart");
-    } finally {
-      setTimeout(setIsPageLoading, 500, false);
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, []);
+
+  useEffect(() => {
+    if (!hasSavedChart) {
+      return;
     }
-  }, [router]);
+
+    const frameId = window.requestAnimationFrame(() => {
+      window.location.replace("/natal");
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [hasSavedChart]);
 
   useEffect(() => {
     const city = birthCity.trim();
@@ -344,29 +360,7 @@ export default function Home() {
 
           <Divider />
 
-          <Box sx={{ display: "flex", gap: 0.3, justifyContent: "center" }}>
-            <IconButton
-              component="a"
-              href="https://www.instagram.com/natalia_fedotova_/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              color="primary"
-            >
-              <InstagramIcon />
-            </IconButton>
-
-            <IconButton
-              component="a"
-              href="https://t.me/Natalia_Fedotovaa"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Telegram"
-              color="primary"
-            >
-              <TelegramIcon />
-            </IconButton>
-          </Box>
+          <SocialLinks />
         </Stack>
       </Box>
     </LocalizationProvider>
