@@ -48,12 +48,12 @@ export default function Home() {
       const savedNatalChart = localStorage.getItem("natalChart");
       if (savedNatalChart) {
         JSON.parse(savedNatalChart);
-        router.push("/natal");
+        router.replace("/natal");
       }
     } catch {
       localStorage.removeItem("natalChart");
     } finally {
-      setTimeout(setIsPageLoading, 500, false);
+      setIsPageLoading(false);
     }
   }, [router]);
 
@@ -147,10 +147,6 @@ export default function Home() {
     } finally {
       setIsSubmitting(false);
     }
-  }
-
-  if (isPageLoading) {
-    return <PageLoader />;
   }
 
   return (
@@ -360,6 +356,8 @@ export default function Home() {
           </Stack>
         </Box>
       </Box>
+
+      {isPageLoading && <PageLoader />}
     </LocalizationProvider>
   );
 }
