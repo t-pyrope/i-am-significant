@@ -39,16 +39,6 @@ export const Logo = ({ size = 1 }: { size?: number }) => {
       >
         astro psychology
       </Box>
-      <Box
-        component="span"
-        sx={{
-          display: "block",
-          fontFamily: "var(--font-pinyon-script), cursive",
-          fontSize: { xs: `calc(2rem * ${size})` },
-        }}
-      >
-        Prague
-      </Box>
     </Typography>
   );
 };

@@ -1,13 +1,6 @@
 import { ReportSection } from "@/app/natal/ReportSection";
 import secondHouseRulers from "@/app/docs/06-second-house-rulers.json";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { Points } from "@/app/natal/Points";
 import { RULERS } from "@/app/natal/constants";
 import { NatalChart } from "@/app/types";
@@ -33,11 +26,11 @@ export const SecondHouseRuler = ({
     <ReportSection title="Управитель твоего 2 дома">
       <Stack spacing={2}>
         {[
-          "Ты уже знаешь свой стиль денег и свои блоки (что мешает повысить самооценку)",
+          "Ты уже знаешь свой стиль денег и свои блоки (что мешает повысить самооценку).",
           "А теперь самое интересное. То, ради чего ты сюда пришла.",
           "У каждого из нас есть природные таланты и навыки, записанные, это не то, чему тебя учили в школе. Это то, что ты умеешь легко, играючи, даже не задумываясь.",
           "Вопрос: Ты используешь эти дары в своей работе? Если да, деньги приходят легко и почти без усилий. Если нет, ты пытаешься заработать через чужое, неестественное для тебя действие, и деньги приходят с трудом.",
-          "Этот дом показывает сферу жизни, где твои таланты раскрываются на 100%. Это планета, которая говорит: «Чтобы заработать, тебе нужно заниматься ВОТ ЭТИМ»",
+          "Этот дом показывает сферу жизни, где твои таланты раскрываются на 100%. Это планета, которая говорит: «Чтобы заработать, тебе нужно заниматься ВОТ ЭТИМ».",
         ].map((block) => (
           <Typography key={block} component="p" sx={{ whiteSpace: "pre-line" }}>
             {block}
