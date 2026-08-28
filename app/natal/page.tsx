@@ -37,7 +37,7 @@ export default function NatalPage() {
         router.replace("/");
       }
 
-      setHasCheckedStorage(true);
+      setTimeout(setHasCheckedStorage, 200, true);
     });
   }, [router]);
 

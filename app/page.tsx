@@ -53,7 +53,7 @@ export default function Home() {
     } catch {
       localStorage.removeItem("natalChart");
     } finally {
-      setIsPageLoading(false);
+      setTimeout(setIsPageLoading, 200, false);
     }
   }, [router]);
 
@@ -195,24 +195,6 @@ export default function Home() {
               backdropFilter: "blur(10px)",
               borderRadius: 5,
               position: "relative",
-              //         "&::before": {
-              //           position: "absolute",
-              //           content: `""`,
-              //           inset: 0,
-              //           borderRadius: 5,
-              //           padding: "1px",
-              //           background: `linear-gradient(
-              //         174deg,
-              //         rgb(255, 255, 255, 0.05),
-              //         rgba(255,255,255,0) 54%,
-              //         rgba(252, 255, 255, 0.04)
-              // )`,
-              //           WebkitMask: `linear-gradient(#000 0 0) content-box,
-              //         linear-gradient(#000 0 0)`,
-              //           maskComposite: "xor",
-              //           mixBlendMode: "overlay",
-              //           pointerEvents: "none",
-              //         },
             }}
           >
             <Box sx={{ textAlign: "center", mb: 1 }}>
